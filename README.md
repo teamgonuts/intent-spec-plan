@@ -27,13 +27,6 @@ starts every piece of work with three files, each read by the next stage: an `in
 `spec` (Design) and a `plan` (Build). This plugin makes those three files for any project, gets
 your approval on each, and tracks them on one live page.
 
-```
-  you ──▶ one question at a time ──▶ INTENT ──✓──▶ SPEC ──✓──▶ PLAN ──✓──▶ your teams
-                                       │            │            │
-                                  what & why    exactly what   in what order,
-                                                 gets built    ticket by ticket
-```
-
 ## The three steps
 
 **1 · Intent.** What you want, why, and within which limits. Claude asks one question at a time.
@@ -50,8 +43,9 @@ one-page intent in your own words.
 The engineers' detail is folded underneath each section.
 
 **3 · Build plan.** The order it's built in. Each step is one ticket for one team, with its files,
-tests written first, a live check, and a ticket ready to paste. Risky work ships behind a flag
-that starts off.
+tests written first and a live check. Risky work ships behind a flag that starts off. Every step
+ends with its ticket written out: a title, a description and acceptance criteria. Copy it from the
+page and paste it straight into Jira, or any other tracker.
 
 Nothing moves until you approve it. There is no spec until the intent is approved, and no plan
 until the spec is.
@@ -59,17 +53,14 @@ until the spec is.
 ## The tracker page
 
 Every initiative gets one live page, a Claude artifact. A sticky bar across the top shows where
-the initiative stands, and switches between the three documents:
+the initiative stands, and switches between the three documents, with a status dot for each:
 
-```
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│ ACME BILLING · REFUND  │  APPROVED 7 OCT     NEEDS YOUR YES     NOT STARTED             │
-│ ●─●─● SELF-SERVE       │  ● 1 INTENT ─────── ● 2 SPEC ───────── ○ 3 PLAN  [YOUR MOVE →] │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
-     ● mint = approved      ● amber = needs your yes      ○ = drafting / not started
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/tracker-dark.png">
+  <img alt="The tracker page: a sticky bar with the initiative and its three stages (intent approved, spec waiting for approval, plan not started), a Your move card, and a card per stage" src="assets/tracker-light.png">
+</picture>
 
-Underneath is the overview:
+The overview holds:
 
 - a "Your move" card that says what needs you now;
 - the three stages, with live status;
@@ -107,7 +98,7 @@ intent-spec-plan.json          your project's settings (from setup)
 initiatives/
 ├── sdlc-kit.css               the shared stylesheet (master copy)
 ├── standing-rules.md          rules every initiative inherits (optional)
-└── refund/
+└── [project name]/
     ├── intent.html            step 1
     ├── spec.html              step 2
     ├── plan.html              step 3
@@ -128,8 +119,8 @@ initiatives/
   the plan each get two: one checks accuracy against the code, one checks intent and safety.
 - **Your words are kept.** Each document ends with the questions you were asked and your exact
   answers. Changes after approval are dated amendments.
-- **No tickets filed behind your back.** The plan carries them, ready to paste, and you decide
-  where they go.
+- **Jira-ready, never filed behind your back.** Each step's ticket is laid out to copy and paste
+  into Jira (or Linear, or GitHub Issues). You decide when and where it goes.
 
 ## Requirements
 
