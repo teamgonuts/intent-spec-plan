@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{CODE} Spec</title>
+<link rel="stylesheet" href="sdlc-kit.css">
+</head>
+<body>
+<!--
+  <docs>/{code}/spec.html is the {CODE} spec: the one file. {Owner} reads and approves it as a page;
+  engineers and reviewers read the same file. Each section shows the plain version first, and the
+  builder's detail under "Builder detail". Shared styling is sdlc-kit.css, next to this file, shared
+  with intent.html and plan.html. Written with the intent-spec-plan plugin's spec skill. Every {…} is
+  a placeholder; a page with one left is not done. Blocks marked OPTIONAL go when the work doesn't
+  need them; a required section that doesn't apply says so in one line.
+-->
+<header class="sv-band">
+  <p class="eyebrow">{Project} · {CODE} — {initiative title} · spec</p>
+  <h1>{what will be true, in plain words}</h1>
+  <p class="lede">{one or two sentences: what this page shows}</p>
+  <p class="meta"><span><b>Status</b> {draft | for {Owner}'s approval | approved {date}}</span><span><b>Built from</b> the intent approved {date} (<code>{code}/intent.html</code>)</span><span><b>Owner</b> {Owner}</span></p>
+</header>
+<main class="sv" id="spec-visual">
+
+  <!-- 1 · In one minute: 3–5 cards, plain words, bold the numbers -->
+  <div class="sv-sec" id="sv-1">
+    <div class="sv-head"><span class="sv-no">1</span><h3>In one minute</h3></div>
+    <div class="sv-sum">
+      <div><span class="eyebrow">Does</span><p>{…}</p></div>
+      <div><span class="eyebrow">You see</span><p>{…}</p></div>
+      <div><span class="eyebrow">Stays safe</span><p>{…}</p></div>
+      <div><span class="eyebrow">Done when</span><p>{…}</p></div>
+    </div>
+  </div>
+
+  <!-- 2 · Decisions: each gap the intent left, and the choice. Mark the ones that are the owner's. -->
+  <div class="sv-sec" id="sv-2">
+    <div class="sv-head"><span class="sv-no">2</span><h3>Decisions this spec makes</h3></div>
+    <p class="sv-intro">Where the intent left a gap, the spec had to choose. You approve these with it.</p>
+    <ol class="sv-dec">
+      <li>{a decision, in one or two sentences, with why} (SP{n})</li>
+      <li class="yes"><span class="chip c-yes">Needs your yes</span> {a decision that is the owner's: money, one of their earlier rules (explained, linked), or something that can't be undone}</li>
+    </ol>
+  </div>
+
+  <!-- 3 · What you'll see: mockups of every screen and message it changes, on real data, every state; exact words in the builder detail. Use .frame.web or .frame.phone; one figure per state. -->
+  <div class="sv-sec" id="sv-3">
+    <div class="sv-head"><span class="sv-no">3</span><h3>What you'll see</h3></div>
+    <div class="gallery">
+      <figure class="shot">
+        <div class="frame web">
+          <div class="chrome"><i></i><i></i><i></i><span class="url">{product URL or screen name}</span></div>
+          <div class="m-bar"><span>{product area}</span><small>{signed-in role}</small></div>
+          <div class="m-body">
+            <div class="m-title">{screen title}</div>
+            <div class="m-banner info"><b>{label}</b>{message, in its exact words}</div>
+            <div class="m-row"><span>{item}</span><span>{value}</span><span class="m-sub">{second line}</span></div>
+            <span class="m-btn">{action}</span>
+          </div>
+        </div>
+        <figcaption><b>{state name}.</b> {what to notice}</figcaption>
+      </figure>
+    </div>
+    <details class="builder"><summary>Builder detail: every line and state</summary><div class="md">
+      <div class="scroll"><table>
+<thead><tr><th>State</th><th>The exact words</th></tr></thead>
+<tbody>
+<tr><td>{…}</td><td>"{…}"</td></tr>
+</tbody>
+</table></div>
+      <p><b>States to design for:</b> {list: empty, loading, normal, error, no permission…}.</p>
+    </div></details>
+  </div>
+
+  <!-- 4 · How it runs: what starts it, then numbered steps, each tagged with who or what acts -->
+  <div class="sv-sec" id="sv-4">
+    <div class="sv-head"><span class="sv-no">4</span><h3>How it runs</h3></div>
+    <div class="whens"><span>{trigger}</span><span>{trigger}</span></div>
+    <ol class="steps">
+      <li><div><h4>{step}</h4><p>{what happens, plainly}</p></div><span class="who">{the user | the system | another team}</span></li>
+    </ol>
+    <details class="builder"><summary>Builder detail</summary><div class="md">
+      <div class="scroll"><table>
+<thead><tr><th>#</th><th>Step</th><th>Acts</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>{EXISTING/NEW <code>path::function</code> or service, what it does}</td><td>{who or what}</td></tr>
+</tbody>
+</table></div>
+    </div></details>
+  </div>
+
+  <!-- 5 · Rules and limits: ladder, limit cards, worked example on real data -->
+  <div class="sv-sec" id="sv-5">
+    <div class="sv-head"><span class="sv-no">5</span><h3>Rules and limits</h3></div>
+    <div class="ladder">
+      <div><span class="r">R1</span><span>{when}</span><span class="go keep">{outcome}</span></div>
+    </div>
+    <div class="limits">
+      <div><b>{number}</b><small>{unit}</small><p>{why}</p></div>
+    </div>
+    <div class="worked">
+      <p class="eyebrow">Worked example · {the real date and data used}</p>
+      <div class="scroll"><table class="wx"><thead><tr><th>{…}</th></tr></thead><tbody><tr><td>{…}</td></tr></tbody></table></div>
+      <div class="verdict"><span class="chip c-ok">{verdict}</span><span>{why}</span></div>
+    </div>
+    <details class="builder"><summary>Builder detail</summary><div class="md">{each rule and limit, its value, constant and where it is enforced}</div></details>
+  </div>
+
+  <!-- 6 · When things go wrong: a card per outcome -->
+  <div class="sv-sec" id="sv-6">
+    <div class="sv-head"><span class="sv-no">6</span><h3>When things go wrong</h3></div>
+    <div class="states">
+      <div class="state ok"><h4><span class="chip c-ok">{Done}</span></h4><p><b>Means</b> {…}</p><p><b>You see</b> {…}</p><p><b>Warns?</b> {…}</p></div>
+      <div class="state bad"><h4><span class="chip c-bad">{Stuck}</span></h4><p><b>Means</b> {…}</p><p><b>You see</b> {…}</p><p><b>Warns?</b> {…}</p></div>
+    </div>
+    <details class="builder"><summary>Builder detail</summary><div class="md">{what each outcome records and shows}</div></details>
+  </div>
+
+  <!-- 7 · Hazards: worst first, each with its guard and its test -->
+  <div class="sv-sec" id="sv-7">
+    <div class="sv-head"><span class="sv-no">7</span><h3>What could go wrong, and what stops it</h3></div>
+    <div class="hazards">
+      <div><span class="hz">H1</span><p><b>{what could go wrong}.</b> {the worst case}</p><p class="stop">{what stops it}</p></div>
+    </div>
+    <details class="builder"><summary>Builder detail</summary><div class="md">{hazard · worst case · guard (SP) · the test that proves the guard}</div></details>
+  </div>
+
+  <!-- 8 · The record: one drawn as a receipt; every timestamp's exact moment -->
+  <div class="sv-sec" id="sv-8">
+    <div class="sv-head"><span class="sv-no">8</span><h3>The record</h3></div>
+    <div class="receipt">
+      <p class="eyebrow">Example · {…}</p>
+      <div class="rr"><span>{field}</span><b>{value}</b></div>
+    </div>
+    <details class="builder"><summary>Builder detail</summary><div class="md">{every field; which moment each timestamp means (submit, not re-read)}</div></details>
+  </div>
+
+  <!-- 9 · Proving it: HOW proving works, said once, plus the coverage map. Section 10 names each requirement's tests. -->
+  <div class="sv-sec" id="sv-9">
+    <div class="sv-head"><span class="sv-no">9</span><h3>Proving it</h3></div>
+    <p class="sv-intro">Three things prove {CODE}, and <b>all of them must pass</b>:</p>
+    <ol class="sv-three">
+      <li><b>Automated tests, for every change.</b> Written before the code, seen failing first, run without touching real users or data. The coverage map shows which kinds of test cover each requirement; section 10 names the tests.</li>
+      <li><b>A live check, for each mechanism.</b> {once in a real environment (staging, a pilot, production behind its flag); what it checks}. They're in the table below.</li>
+      <li><b>{The done-check}</b> closes the initiative: the intent's M checks, seen true.</li>
+    </ol>
+    <p class="eyebrow">Coverage: every requirement, and what proves it</p>
+    <p class="sv-intro">Green dots are automated tests (the number in the dot is how many); blue dots are live checks and the done-check. Every row has at least one green dot. Dots are strict: a proof marks only what it actually checks.</p>
+    <div class="scroll"><table class="cmap">
+<thead><tr><th></th><th></th><th colspan="2" class="cg">Tests</th><th colspan="{n}" class="cg">Live checks</th><th></th></tr>
+<tr><th class="cl">Req</th><th class="cl">What it says</th><th>Unit</th><th>Integration</th><th>{check}</th><th>Done</th></tr></thead>
+<tbody>
+<tr><td class="cid">SP1</td><td class="cl">{short name}</td><td><span class="cmd t">{n}</span></td><td></td><td><span class="cmd p"></span></td><td></td></tr>
+</tbody>
+</table></div>
+    <p class="eyebrow">The live checks</p>
+    <div class="scroll"><table class="wx">
+<thead><tr><th>Check</th><th>What it exercises</th><th>If the case doesn't happen by itself</th><th>Passes when</th></tr></thead>
+<tbody>
+<tr><td><b>{check}</b></td><td>{…}</td><td>{how it's staged, or what it waits for and how often}</td><td>{…}</td></tr>
+</tbody>
+</table></div>
+    <p class="sv-intro">{the staging limits; anything not checked live, why, and what covers it}</p>
+    <div class="verified"><p class="eyebrow">{The done-check}: all must be true</p><ul class="checks"><li>{M1, in plain words}</li></ul></div>
+    <details class="builder"><summary>Builder detail</summary><div class="md">{how a live check is run and read: environment, flag state, dashboards or queries, verdicts}</div></details>
+  </div>
+
+  <!-- 10 · Every requirement: one row each; builder columns are 3–5 and hide behind the switch -->
+  <div class="sv-sec" id="sv-10">
+    <div class="sv-head"><span class="sv-no">10</span><h3>Every requirement</h3></div>
+    <div class="rq-tools"><button type="button" id="rq-toggle" aria-pressed="false">Show builder columns</button></div>
+    <div class="md req">
+      <div class="scroll"><table>
+<thead><tr><th>ID</th><th>Rule</th><th>Enforced in</th><th>Proven by</th><th>Gated</th><th>Users see</th><th>What the tests check</th></tr></thead>
+<tbody>
+<tr><td><b>SP1</b> ({O1})</td><td><b>{name}.</b> When {…}, the product {…}.</td><td>{EXISTING/NEW <code>path::fn</code>}</td><td>{test file › "test name"}</td><td>{the flag or approval it sits behind, or —}</td><td>{…}</td><td>{plain line}</td></tr>
+</tbody>
+</table></div>
+      <p><b>The trace.</b> Every line of the intent maps to requirements; nothing is left over.</p>
+      <div class="scroll"><table>
+<thead><tr><th>Intent or rule</th><th>Requirements</th></tr></thead>
+<tbody>
+<tr><td>{O1}</td><td>{SP1}</td></tr>
+</tbody>
+</table></div>
+    </div>
+  </div>
+
+  <!-- 11 · Check first -->
+  <div class="sv-sec" id="sv-11">
+    <div class="sv-head"><span class="sv-no">11</span><h3>Check first</h3></div>
+    <div class="two-col">
+      <div><p class="eyebrow">Your open questions: settled</p><ul class="settled"><li><b>Q1 {…}.</b> {answer, with evidence}</li></ul></div>
+      <div><p class="eyebrow">Looks the build takes first: not decisions</p><ul class="checks"><li>{…}</li></ul></div>
+    </div>
+  </div>
+
+  <!-- 12 · Boundaries -->
+  <div class="sv-sec" id="sv-12">
+    <div class="sv-head"><span class="sv-no">12</span><h3>Boundaries</h3></div>
+    <div class="chips-out"><span>{out of scope}</span></div>
+    <p class="sv-intro"><b>Protected areas:</b> {none, or each piece of code, data or system it must not change, and the only change allowed}</p>
+  </div>
+
+  <!-- 13 · What it replaces (OPTIONAL) -->
+  <div class="sv-sec" id="sv-13">
+    <div class="sv-head"><span class="sv-no">13</span><h3>What it replaces</h3></div>
+    <div class="replaces"><div><b>{old}</b></div><span>→</span><div><b>{new}</b></div></div>
+  </div>
+
+  <!-- A · The owner's words: questions asked during the spec, their answers, then amendments -->
+  <div class="sv-sec" id="sv-a">
+    <div class="sv-head"><span class="sv-no">A</span><h3>Your words</h3></div>
+    <div class="md"><p><b>{date}, on {what was asked}:</b> <i>"{their exact words}"</i></p><h3>Amendments</h3><p>None yet.</p></div>
+  </div>
+</main>
+<script>
+/* The requirements table hides its builder columns until they're switched on. */
+(function () {
+  var b = document.getElementById("rq-toggle"), req = document.querySelector(".req");
+  if (!b || !req) return;
+  b.addEventListener("click", function () {
+    var on = b.getAttribute("aria-pressed") !== "true";
+    b.setAttribute("aria-pressed", String(on));
+    req.classList.toggle("show-tech", on);
+    b.textContent = on ? "Hide builder columns" : "Show builder columns";
+  });
+})();
+</script>
+</body>
+</html>

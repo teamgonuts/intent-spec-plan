@@ -1,0 +1,345 @@
+<title>@@TITLE@@</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one page, read top to bottom: where the initiative stands, then the intent, the spec and
+   the build plan in order, then the standing rules and the log. Tokens match sdlc-kit.css. */
+:root{
+  --bg:#F4F6F3; --surface:#FFFFFF; --ink:#1B2220; --muted:#5A6661; --faint:#8A948F; --rule:#D8DED9; --rule-strong:#B9C2BC;
+  --new:#2D5BA3; --new-soft:#E3EAF6;
+  --cut:#A9462B; --cut-soft:#F6E6DF;
+  --keep:#3B7A4B; --keep-soft:#E2EFE4;
+  --warn:#8C6410; --warn-bg:#F7EDD2; --na-bg:#ECEFEC;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#121715; --surface:#1A201E; --ink:#E6ECE8; --muted:#A4AFAA; --faint:#7D8883; --rule:#2C3431; --rule-strong:#3E4843;
+    --new:#8FB0EA; --new-soft:#1E2A3D; --cut:#E99A7F; --cut-soft:#3A241D; --keep:#8CCB9B; --keep-soft:#1C3023;
+    --warn:#E3BE6A; --warn-bg:#3A2F14; --na-bg:#262D2A;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#121715; --surface:#1A201E; --ink:#E6ECE8; --muted:#A4AFAA; --faint:#7D8883; --rule:#2C3431; --rule-strong:#3E4843;
+  --new:#8FB0EA; --new-soft:#1E2A3D; --cut:#E99A7F; --cut-soft:#3A241D; --keep:#8CCB9B; --keep-soft:#1C3023;
+  --warn:#E3BE6A; --warn-bg:#3A2F14; --na-bg:#262D2A;
+}
+*{box-sizing:border-box}
+/* [hidden] must win over the display rules below, or hidden placeholders and forms still show. */
+[hidden]{display:none !important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.55;margin:0;padding-inline:20px;padding-block:32px 64px}
+@media (max-width:600px){body{padding-inline:16px}}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:52px}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.005em}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.08;font-weight:700}
+h2{font-size:24px;font-weight:600;line-height:1.15}
+h3{font-size:17px;font-weight:600}
+p{margin:0;max-width:72ch}
+ul,ol{margin:0;padding-left:20px}
+a{color:var(--new)}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--new);outline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17px;max-width:70ch}
+.muted{color:var(--muted)}
+.meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
+header.top{display:flex;flex-direction:column;gap:14px}
+section.block{display:flex;flex-direction:column;gap:16px;min-width:0}
+.sec-head{display:flex;flex-direction:column;gap:6px;border-top:2px solid var(--ink);padding-top:14px}
+code{font-family:var(--mono);font-size:.88em;background:var(--na-bg);padding:1px 4px;border-radius:3px;overflow-wrap:anywhere}
+.handoff{background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--warn);border-radius:4px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.handoff b{font-family:var(--display);font-size:19px;font-weight:600}
+.chip{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;font-weight:500;white-space:nowrap;background:var(--na-bg);color:var(--muted)}
+.chip.s-drafting,.chip.s-in-progress{background:var(--new-soft);color:var(--new)}
+.chip.s-for-approval{background:var(--warn-bg);color:var(--warn)}
+.chip.s-approved,.chip.s-done{background:var(--keep-soft);color:var(--keep)}
+.chip.s-blocked{background:var(--cut-soft);color:var(--cut)}
+.ro{font-size:13px;color:var(--warn);background:var(--warn-bg);border-radius:3px;padding:6px 10px}
+
+/* stages */
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:600px){.stages{grid-template-columns:1fr}}
+.stage{background:var(--surface);border:1px solid var(--rule);border-top:4px solid var(--rule-strong);border-radius:4px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.stage[data-st="drafting"],.stage[data-st="in-progress"]{border-top-color:var(--new)}
+.stage[data-st="for-approval"]{border-top-color:var(--warn)}
+.stage[data-st="approved"],.stage[data-st="done"]{border-top-color:var(--keep)}
+.stage[data-st="blocked"]{border-top-color:var(--cut)}
+.stage .num{font-family:var(--mono);font-size:11px;color:var(--faint)}
+.stage .when{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.stage p{font-size:13.5px;line-height:1.45;color:var(--muted)}
+.stage a{font-size:13px}
+.stage select{font:inherit;font-size:12.5px;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:3px;padding:3px 6px;width:100%}
+.empty{font-size:14px;color:var(--muted);background:var(--surface);border:1px dashed var(--rule-strong);border-radius:4px;padding:14px 16px}
+
+/* how it is built */
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;counter-reset:f}
+@media (max-width:980px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.flow{grid-template-columns:1fr}}
+.flow div{border-left:2px solid var(--rule-strong);padding:2px 0 2px 10px;display:flex;flex-direction:column;gap:3px;font-size:13.5px;line-height:1.4;min-width:0}
+.flow div::before{counter-increment:f;content:counter(f);font-family:var(--display);font-size:20px;font-weight:600;color:var(--new);line-height:1}
+.flow div.you{border-left-color:var(--warn)}
+.flow div.you::before{color:var(--warn)}
+.flow b{font-family:var(--display);font-size:15.5px;font-weight:600}
+.flow span{color:var(--muted)}
+
+/* documents */
+.dochead{display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--ink);padding-top:14px}
+.dochead .row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.dochead h2{font-size:26px}
+.dochead .step{font-family:var(--display);font-size:26px;font-weight:600;color:var(--faint)}
+.dochead .facts{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.doc{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:26px clamp(16px,4vw,40px) 34px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.doc>h1:first-child{font-size:clamp(21px,3.4vw,27px);line-height:1.15}
+.doc h1{font-size:24px}
+.doc h2{font-size:20px;border-top:1px solid var(--rule);padding-top:18px;margin-top:10px}
+.doc h3{font-size:16.5px;margin-top:4px}
+.doc p,.doc li{max-width:74ch}
+.doc ul,.doc ol{display:flex;flex-direction:column;gap:6px}
+.doc li>ul,.doc li>ol{margin-top:6px}
+.doc blockquote{margin:0;border-left:3px solid var(--rule-strong);padding:2px 0 2px 14px;color:var(--muted)}
+.scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:4px;background:var(--surface)}
+.doc table{border-collapse:collapse;width:100%;min-width:620px;font-size:13.5px}
+.doc th,.doc td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--rule)}
+.doc tr:last-child td{border-bottom:0}
+.doc thead th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:500;color:var(--muted);background:var(--bg)}
+.placeholder{background:var(--surface);border:1px dashed var(--rule-strong);border-radius:4px;padding:22px clamp(16px,4vw,36px);display:flex;flex-direction:column;gap:12px}
+.placeholder ol{display:flex;flex-direction:column;gap:6px;font-size:14.5px}
+
+/* log */
+.log{display:flex;flex-direction:column}
+.ev{display:grid;grid-template-columns:72px 92px minmax(0,1fr);gap:10px;font-size:14px;padding:8px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+@media (max-width:600px){.ev{grid-template-columns:72px minmax(0,1fr)}.ev .tx{grid-column:1 / -1}}
+.ev .at{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.evform{display:grid;grid-template-columns:130px minmax(0,1fr) auto;gap:8px;align-items:center;margin-top:10px}
+@media (max-width:600px){.evform{grid-template-columns:1fr}}
+.evform select,.evform input{font:inherit;font-size:13.5px;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:3px;padding:6px 8px;width:100%}
+.btn{font:inherit;font-size:13px;font-weight:600;color:var(--surface);background:var(--new);border:0;border-radius:3px;padding:7px 12px;cursor:pointer}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:18px;display:flex;flex-direction:column;gap:6px}
+.wrap .sv-band{margin-bottom:12px}
+.wrap .sv-band h1{font-size:clamp(22px,3.4vw,28px)}
+</style>
+<!--@@SPEC_KIT@@-->
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">@@EYEBROW@@</div>
+  <h1>@@HEADLINE@@</h1>
+  <p class="lede">@@LEDE@@</p>
+  <div class="meta">@@META@@</div>
+  <div class="handoff">
+    <div class="eyebrow">Your move</div>
+    <b>@@NEXT_TITLE@@</b>
+    <p>@@NEXT_BODY@@</p>
+  </div>
+</header>
+
+<section class="block" aria-labelledby="h-stages">
+  <div class="sec-head">
+    <div class="eyebrow">Progress</div>
+    <h2 id="h-stages">Where @@CODE@@ stands</h2>
+    <p class="muted">Live: this updates as each stage moves. Setting a stage to Approved is your approval.</p>
+  </div>
+  <div id="ro" class="ro" hidden>Live tracking isn't available in this view, so progress isn't shown here.</div>
+  <div class="stages" id="stages"><div class="empty">Loading the stages: intent, spec and build plan.</div></div>
+  <div class="flow" aria-label="How @@CODE@@ is shaped">
+    <div class="you"><b>Intent</b><span>What you want, why, and within which limits, from your answers to one question at a time. You approve it.</span></div>
+    <div class="you"><b>Spec</b><span>Exactly what will be built: what users see, every rule, what could go wrong, and how each requirement is proven. You approve it.</span></div>
+    <div class="you"><b>Build plan</b><span>The order it is built in, one step per ticket, each with its files, tests and live check. You approve it.</span></div>
+    <div><b>Hand-off</b><span>The teams build from the approved plan. Each step carries a ticket ready to paste into their tracker.</span></div>
+  </div>
+</section>
+
+<section class="block" id="intent" aria-labelledby="h-intent">
+  <div class="dochead">
+    <div class="row"><span class="step">1</span><h2 id="h-intent">Intent</h2><span class="chip" id="intent-chip">Not started</span></div>
+    <div class="facts"><span id="intent-when"></span><code>@@CODE_DIR@@/intent.html</code><span><!--@@INTENT_COMMIT@@--></span></div>
+  </div>
+<!--@@INTENT_DOC@@-->
+  <div class="placeholder" id="ph-intent">
+    <h3>The intent is being shaped</h3>
+    <p>It starts as questions in chat, one at a time, each with a recommended answer. Once every section can be filled from your answers, the one-page intent appears here for your approval.</p>
+  </div>
+</section>
+
+<section class="block" id="spec" aria-labelledby="h-spec">
+  <div class="dochead">
+    <div class="row"><span class="step">2</span><h2 id="h-spec">Spec</h2><span class="chip" id="spec-chip">Not started</span></div>
+    <div class="facts"><span id="spec-when"></span><code>@@CODE_DIR@@/spec.html</code><span><!--@@SPEC_COMMIT@@--></span></div>
+  </div>
+<!--@@SPEC_DOC@@-->
+  <div class="placeholder" id="ph-spec">
+    <h3>The spec starts when you approve the intent</h3>
+    <p>It turns every line of the intent into requirements: what users will see in every state, the rules and limits, what could go wrong and what stops it, and the test that proves each requirement. It settles every open question the intent leaves.</p>
+  </div>
+</section>
+
+<section class="block" id="plan" aria-labelledby="h-plan">
+  <div class="dochead">
+    <div class="row"><span class="step">3</span><h2 id="h-plan">Build plan</h2><span class="chip" id="plan-chip">Not started</span></div>
+    <div class="facts"><span id="plan-when"></span><code>@@CODE_DIR@@/plan.html</code><span><!--@@PLAN_COMMIT@@--></span></div>
+  </div>
+<!--@@PLAN_DOC@@-->
+  <div class="placeholder" id="ph-plan">
+    <h3>The build plan follows the approved spec</h3>
+    <p>One step per change, in order. Each step says what users will see, the files that change, the tests that prove it, its risk and its live check, and ends with a ticket the team can paste into their tracker.</p>
+  </div>
+</section>
+
+<section class="block" id="standing-rules" aria-labelledby="h-standing" hidden>
+  <div class="dochead">
+    <div class="row"><h2 id="h-standing">Standing rules</h2></div>
+    <div class="facts"><span>What every initiative in @@PROJECT@@ inherits. Each intent's constraints point here instead of repeating them.</span><code>@@STANDING_PATH@@</code></div>
+  </div>
+  <article class="doc" id="doc-standing"></article>
+</section>
+
+<section class="block" aria-labelledby="h-log">
+  <div class="sec-head">
+    <div class="eyebrow">Log</div>
+    <h2 id="h-log">Decisions and events</h2>
+  </div>
+  <div class="log" id="log"><div class="empty">Loading the log.</div></div>
+  <form class="evform" id="evform" hidden>
+    <select id="ev-kind" aria-label="Kind"><option value="note">note</option><option value="decision">decision</option><option value="event">event</option></select>
+    <input id="ev-text" placeholder="What happened, in one line" autocomplete="off" aria-label="What happened">
+    <button class="btn" type="submit">Add to log</button>
+  </form>
+</section>
+
+<footer>
+  <span>The intent <em>is</em> <code>@@CODE_DIR@@/intent.html</code>, the spec <em>is</em> <code>@@CODE_DIR@@/spec.html</code> and the plan <em>is</em> <code>@@CODE_DIR@@/plan.html</code>: each is built into this page unchanged, with their shared <code>sdlc-kit.css</code>. Page built @@BUILT@@.</span>
+  <span>Made with <a href="https://github.com/teamgonuts/intent-spec-plan" target="_blank" rel="noopener">intent-spec-plan</a>.</span>
+</footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script>
+const STANDING = /*@@STANDING@@*/"";
+const STATUS = {
+  "not-started": "Not started", "drafting": "Drafting", "for-approval": "For your approval",
+  "approved": "Approved", "blocked": "Blocked"
+};
+const DOCS = ["intent", "spec", "plan"];
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function shortDate(iso, withYear) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ""));
+  return m ? `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]}${withYear ? " " + m[1] : ""}` : "";
+}
+
+/* documents: each one built in hides its placeholder */
+for (const [id, root] of [["intent", "#intent-doc"], ["spec", "#spec-visual"], ["plan", "#plan-visual"]]) {
+  if ($(root)) { const ph = $("#ph-" + id); if (ph) ph.hidden = true; }
+}
+
+/* the spec's requirements table: the builder-columns switch */
+(function () {
+  const tg = $("#rq-toggle"), req = document.querySelector("#spec-visual .req");
+  if (!tg || !req) return;
+  tg.addEventListener("click", () => {
+    const on = tg.getAttribute("aria-pressed") !== "true";
+    tg.setAttribute("aria-pressed", String(on));
+    req.classList.toggle("show-tech", on);
+    tg.textContent = on ? "Hide builder columns" : "Show builder columns";
+  });
+})();
+
+/* the standing rules, when the project has them */
+if (STANDING) {
+  const el = $("#doc-standing");
+  if (window.marked && typeof window.marked.parse === "function") {
+    el.innerHTML = window.marked.parse(STANDING, { gfm: true });
+    for (const t of el.querySelectorAll("table")) {
+      const wrap = document.createElement("div"); wrap.className = "scroll";
+      t.parentNode.insertBefore(wrap, t); wrap.appendChild(t);
+    }
+  } else {
+    const pre = document.createElement("pre"); pre.style.whiteSpace = "pre-wrap"; pre.textContent = STANDING;
+    el.replaceChildren(pre);
+  }
+  $("#standing-rules").hidden = false;
+  for (const a of document.querySelectorAll("a.standing")) { a.setAttribute("href", "#standing-rules"); a.removeAttribute("target"); }
+}
+for (const a of document.querySelectorAll("main a[href^='http'], .sv-band a[href^='http']")) { a.target = "_blank"; a.rel = "noopener"; }
+
+/* tracker: stages and log live in the artifact's db */
+let canWrite = null;
+let readOnly = false;
+function setChip(el, st) {
+  if (!el) return;
+  el.className = "chip s-" + st;
+  el.textContent = STATUS[st] || st;
+}
+function renderStages(snap) {
+  const box = $("#stages");
+  const rows = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order || 0) - (b.order || 0));
+  if (!rows.length) { box.innerHTML = '<div class="empty">No stages recorded yet.</div>'; return; }
+  box.innerHTML = rows.map((s) => {
+    const st = s.status || "not-started";
+    const jump = DOCS.includes(s.id) ? `<a href="#${esc(s.id)}">Read it below</a>` : "";
+    const ctl = (canWrite !== false && !readOnly)
+      ? `<select data-stage="${esc(s.id)}" aria-label="Status of ${esc(s.label)}">${Object.keys(STATUS).map((k) => `<option value="${k}"${k === st ? " selected" : ""}>${STATUS[k]}</option>`).join("")}</select>`
+      : "";
+    return `<div class="stage" data-st="${esc(st)}"><span class="num">${esc(s.order)}</span><h3>${esc(s.label)}</h3><span class="chip s-${esc(st)}">${esc(STATUS[st] || st)}</span>${s.date ? `<span class="when">${esc(shortDate(s.date))}</span>` : ""}${s.note ? `<p>${esc(s.note)}</p>` : ""}${jump}${ctl}</div>`;
+  }).join("");
+  for (const s of rows) {
+    if (!DOCS.includes(s.id)) continue;
+    const st = s.status || "not-started";
+    setChip($(`#${s.id}-chip`), st);
+    const when = $(`#${s.id}-when`);
+    if (when && s.date) when.textContent = `${st === "approved" ? "Approved" : "Updated"} ${shortDate(s.date, true)}`;
+  }
+}
+function renderLog(snap) {
+  const box = $("#log");
+  const rows = snap.docs.map((d) => d.data());
+  if (!rows.length) { box.innerHTML = '<div class="empty">Nothing in the log yet.</div>'; return; }
+  box.innerHTML = rows.map((e) => `<div class="ev"><span class="at">${esc(shortDate(e.at))}</span><span><span class="chip${e.kind === "decision" ? " s-approved" : e.kind === "event" ? " s-drafting" : ""}">${esc(e.kind || "note")}</span></span><span class="tx">${esc(e.text)}</span></div>`).join("");
+}
+function goReadOnly() {
+  readOnly = true;
+  $("#evform").hidden = true;
+  for (const s of document.querySelectorAll("select[data-stage]")) s.remove();
+}
+(async () => {
+  let db = null;
+  try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch (e) { db = null; }
+  if (!db) {
+    $("#ro").hidden = false;
+    $("#stages").innerHTML = "";
+    $("#log").innerHTML = "";
+    return;
+  }
+  try {
+    const user = await window.claude.use("user");
+    canWrite = user ? await user.can("data.write") : null;
+  } catch (e) { canWrite = null; }
+  if (canWrite !== false) $("#evform").hidden = false;
+  const fail = () => {};
+  db.collection("stages").onSnapshot(renderStages, fail);
+  db.collection("log").orderBy("at", "desc").limit(200).onSnapshot(renderLog, fail);
+  $("#stages").addEventListener("change", async (e) => {
+    const sel = e.target.closest("select[data-stage]"); if (!sel) return;
+    const now = new Date().toISOString();
+    try {
+      await db.doc("stages/" + sel.dataset.stage).update({ status: sel.value, date: now.slice(0, 10) });
+      await db.collection("log").add({ at: now, kind: sel.value === "approved" ? "decision" : "event", text: `${sel.dataset.stage}: set to ${STATUS[sel.value] || sel.value} on this page` });
+    } catch (err) { if (err && err.code === "invalid_argument") goReadOnly(); }
+  });
+  $("#evform").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const text = $("#ev-text").value.trim(); if (!text) return;
+    try {
+      await db.collection("log").add({ at: new Date().toISOString(), kind: $("#ev-kind").value, text });
+      $("#ev-text").value = "";
+    } catch (err) { if (err && err.code === "invalid_argument") goReadOnly(); }
+  });
+})();
+</script>

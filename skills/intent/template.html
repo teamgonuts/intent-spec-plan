@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{CODE} Intent</title>
+<link rel="stylesheet" href="sdlc-kit.css">
+</head>
+<body>
+<!--
+  <docs>/{code}/intent.html is the {CODE} intent: the one file {Owner} approves as a page and everyone
+  after reads. Written with the intent-spec-plan plugin's intent skill; styled by sdlc-kit.css (a copy
+  of the docs folder's master), shared with spec.html and plan.html next to it. The body, from the
+  header to Open questions, stays near 600 words; the appendix and amendments are not counted.
+  Every {…} is a placeholder; a page with one left is not done. Sections marked OPTIONAL go when the
+  content doesn't need them.
+-->
+<header class="sv-band">
+  <p class="eyebrow">{Project} · {CODE} · intent</p>
+  <h1>{initiative title} ({CODE})</h1>
+  <p class="lede">The ask, in {Owner}'s words: <i>"{the original request, verbatim, shortened with … only}"</i></p>
+  <p class="meta"><span><b>Owner</b> {Owner}</span><span><b>Status</b> {draft | for approval | approved {date}}</span><span><b>Supersedes</b> {an earlier plan or brief, or nothing}</span></p>
+</header>
+<main class="sdlc-doc" id="intent-doc">
+
+<!-- OPTIONAL: only when a word carries a special meaning -->
+<section id="terms">
+<div class="terms"><p><b>Terms</b></p>
+<ul>
+<li><i>{word}</i>: {meaning}.</li>
+</ul>
+</div>
+</section>
+
+<section id="problem">
+<h2>Problem</h2>
+<p>{At most three sentences, in the owner's words: what is wrong today, and for whom. No solution.}</p>
+</section>
+
+<section id="goal">
+<h2>Goal</h2>
+<p>{One line: the strategy objective(s) it serves. No vanity target.}</p>
+</section>
+
+<section id="proposed-outcome">
+<h2>Proposed outcome</h2>
+<ul>
+<li><b>O1.</b> {what will be true, as the people it serves would see or get it; at most O6; no screens, pages or mechanisms}</li>
+</ul>
+</section>
+
+<!-- OPTIONAL: when the initiative is a decision procedure the owner set. First match decides. -->
+<section id="rules">
+<h2>Rules</h2>
+<p>The first match decides.</p>
+<ul>
+<li><b>R1.</b> {when …: what happens}</li>
+</ul>
+</section>
+
+<section id="how-we-know-it-works">
+<h2>How we know it works</h2>
+<p>{Over / On} {a stated period}:</p>
+<ul>
+<li><b>M1.</b> {a check anyone can make by looking, with its source and today's number; two to four in all}</li>
+</ul>
+</section>
+
+<section id="affected-users-and-systems">
+<h2>Affected users and systems</h2>
+<ul>
+<li><b>Who:</b> {the people it serves, and anyone else it changes things for}</li>
+<li><b>What it touches:</b> {the parts of the product, in plain words}</li>
+<li><b>Other work:</b> {other initiatives or teams, and how}</li>
+<li><b>Who else acts on the same thing:</b> {people, teams, systems or automations that change the same data, money or records}</li>
+</ul>
+</section>
+
+<section id="constraints">
+<h2>Constraints</h2>
+<p>{The <a class="standing" href="{the standing rules file, relative to this folder}">standing rules</a> apply. | No standing rules are set for this project.} This initiative adds:</p>
+<ul>
+<li><b>Always:</b> <b>C1.</b> {rule}</li>
+<li><b>Ask {Owner} first:</b> <b>C2.</b> {the moments that need a person's yes}</li>
+<li><b>Never:</b> <b>C3.</b> {rule}</li>
+</ul>
+</section>
+
+<!-- OPTIONAL: when it spends money or does something that can't be undone: ceilings, what a trial costs, how it is switched off -->
+<section id="money">
+<h2>Money and what can't be undone</h2>
+<ul><li>{…}</li></ul>
+</section>
+
+<!-- OPTIONAL: when the owner set how much it is worth spending on it -->
+<section id="appetite">
+<h2>Appetite</h2>
+<p>{how much time or effort it is worth, in the owner's words}</p>
+</section>
+
+<section id="out-of-scope">
+<h2>Out of scope</h2>
+<ul>
+<li><b>N1.</b> {something plausible, deliberately left out} ({who owns it})</li>
+</ul>
+</section>
+
+<section id="assumptions">
+<h2>Assumptions</h2>
+<p>{A1. a default Claude chose that the owner did not state (confirm or veto) — or "None."}</p>
+</section>
+
+<section id="open-questions">
+<h2>Open questions</h2>
+<ul>
+<li><b>Q1. Look:</b> {settled by a look at the code, the data or the real product}</li>
+<li><b>Q2. {Owner}:</b> {a decision only the owner can make}</li>
+</ul>
+</section>
+
+<section id="appendix" class="appendix">
+<h2>Appendix: decisions, in {Owner}'s words</h2>
+<div class="scroll"><table>
+<thead><tr><th>Date</th><th>The question as asked</th><th>The exact answer</th><th>Became</th></tr></thead>
+<tbody>
+<tr><td>{date}</td><td>{the question}</td><td><i>"{their words}"</i></td><td>{O1, R2…}</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<!-- After approval: -->
+<section id="amendments" class="appendix">
+<h2>Amendments</h2>
+<div class="scroll"><table>
+<thead><tr><th>Date</th><th>What changed</th><th>{Owner}'s words</th></tr></thead>
+<tbody>
+<tr><td>{date}</td><td>{…}</td><td><i>"{…}"</i></td></tr>
+</tbody>
+</table></div>
+</section>
+</main>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{CODE} Build Plan</title>
+<link rel="stylesheet" href="sdlc-kit.css">
+</head>
+<body>
+<!--
+  <docs>/{code}/plan.html is the {CODE} build plan: the one file. {Owner} reads and approves it as a
+  page; the engineering teams who build it read the same file, and each step carries a ticket ready to
+  paste into their tracker. Each step shows what users will see first, and the engineers' detail under
+  "Builder detail". Shared styling is sdlc-kit.css, next to this file, shared with intent.html and
+  spec.html. Written with the intent-spec-plan plugin's build-plan skill, from a draft by the built-in
+  Plan agent. Every {…} is a placeholder; a page with one left is not done.
+-->
+<header class="sv-band">
+  <p class="eyebrow">{Project} · {CODE} — {initiative title} · build plan</p>
+  <h1>{N} steps to {what will be true, in plain words}</h1>
+  <p class="lede">{one or two sentences: the order, who builds it, what is built switched off, and what switches it on}</p>
+  <p class="meta"><span><b>Status</b> {draft | for {Owner}'s approval | approved {date}}</span><span><b>Built from</b> the spec approved {date} (<code>{code}/spec.html</code>{, amendments …})</span><span><b>Owner</b> {Owner}</span><span><b>Built by</b> {teams}</span><span><b>Code</b> {repo} at <code>{commit}</code></span></p>
+</header>
+<main class="sv" id="plan-visual">
+
+  <!-- 0 · In one minute: 4–5 cards, plain words, bold the numbers. "How it is used" goes under them. -->
+  <div class="sv-sec" id="plan-0">
+    <div class="sv-head"><span class="sv-no">0</span><h3>In one minute</h3></div>
+    <div class="sv-sum">
+      <div><span class="eyebrow">Order</span><p>{…}</p></div>
+      <div><span class="eyebrow">Stays off</span><p>{until which step, behind which flag, and what users see meanwhile}</p></div>
+      <div><span class="eyebrow">Size</span><p>{the rough total, and the biggest step}</p></div>
+      <div><span class="eyebrow">Depends on</span><p>{other teams, other work, access or decisions it waits for}</p></div>
+      <div><span class="eyebrow">Undo</span><p>{how a bad release is undone: switch the flag off}</p></div>
+    </div>
+    <details class="builder"><summary>How it is used</summary><div class="md">
+<ul>
+<li><strong>One step, one ticket, one pull request, in order.</strong> Each step below ends with its ticket, ready to paste into {the team's tracker}. Steps that wait on nothing may run in parallel; the glance table says which.</li>
+<li><strong>Tests first.</strong> Every test a step names is written first and seen failing before the code that makes it pass.</li>
+<li><strong>Review.</strong> Each pull request is reviewed against its step's Done-when lines. {Any extra checklist for risky steps.}</li>
+<li><strong>Departures.</strong> A build that departs from a step updates this file, and says why under "Found while planning".</li>
+<li><strong>The switch.</strong> {the feature flag, where it lives, what it holds back while off, which step turns it on and who decides}</li>
+<li><strong>How a live check runs.</strong> {environment, who runs it, what is read to decide it passed}</li>
+<li><strong>"Checked" is written down.</strong> A live check that passed is noted on its ticket and in the tracker page's log; a merged step whose check is still pending stays open.</li>
+<li><strong>Gated</strong> means a protected area from spec §12. {which, or "none"}</li>
+</ul>
+    </div></details>
+  </div>
+
+  <!-- The steps at a glance: one row a step. Risk chip: c-ok low, c-yes medium, c-bad high. Size: S ≤ 1 day, M ≤ 3 days, L ≤ a week. -->
+  <div class="sv-sec" id="plan-glance">
+    <div class="sv-head"><span class="sv-no">·</span><h3>The steps at a glance</h3></div>
+    <p class="sv-intro">{one line on what the risk colours mean and how risky steps are held back}</p>
+    <div class="scroll"><table class="wx">
+<thead><tr><th>Step</th><th>What users will see</th><th>Covers</th><th>Team</th><th>Size</th><th>Risk</th><th>Live check</th><th>Waits for</th></tr></thead>
+<tbody>
+<tr><td><a href="#step-1"><b>1</b></a> {title}</td><td>{…}</td><td>{SP…}</td><td>{team or skill}</td><td>{S | M | L}</td><td><span class="chip c-ok">low</span></td><td>{—}</td><td>{nothing | step n | a decision}</td></tr>
+</tbody>
+</table></div>
+  </div>
+
+  <!-- Coverage: a row per spec requirement, a column per step, a dot where the step builds it. No empty row. -->
+  <div class="sv-sec" id="plan-coverage">
+    <div class="sv-head"><span class="sv-no">·</span><h3>Coverage: every requirement, and the step that builds it</h3></div>
+    <p class="sv-intro">Each row is one of the spec's {n} requirements, and each column a step. A dot means that step builds it and its tests. Every row has at least one dot. Which tests and live checks prove each requirement is the spec's own coverage map (spec section 9).</p>
+    <div class="scroll"><table class="cmap">
+<thead><tr><th class="cl">Req</th><th class="cl">What it says</th><th><a href="#step-1">1</a></th><th><a href="#step-2">2</a></th></tr></thead>
+<tbody>
+<tr><td class="cid">{SP1}</td><td class="cl">{its title, as in the spec's map}</td><td><span class="cmd t" title="step 1"></span></td><td></td></tr>
+</tbody>
+</table></div>
+  </div>
+
+  <!-- Before step 1: what must be true before anyone starts. -->
+  <div class="sv-sec" id="plan-before">
+    <div class="sv-head"><span class="sv-no">·</span><h3>Before step 1</h3></div>
+    <p class="sv-intro">{what has to be in place before the first ticket starts, in one line}</p>
+    <details class="builder" open><summary>Builder detail</summary><div class="md">
+<ol>
+<li><strong>{The feature flag}</strong>: {created where, off everywhere, who may switch it}.</li>
+<li><strong>{Access, data or environments}</strong>: {what is needed and who grants it}.</li>
+<li><strong>{Other teams}</strong>: {what they are told or asked for, and by when}.</li>
+</ol>
+    </div></details>
+  </div>
+
+  <!-- One block per step. Copy for each. -->
+  <div class="sv-sec" id="step-1">
+    <div class="sv-head"><span class="sv-no">1</span><h3>{title}</h3></div>
+    <div class="sv-sum">
+      <div><span class="eyebrow">Users will see</span><p>{in plain words; "Nothing yet" is fine}</p></div>
+      <div><span class="eyebrow">Covers</span><p>{SP…}</p></div>
+      <div><span class="eyebrow">Team · size</span><p>{team} · {S | M | L}</p></div>
+      <div><span class="eyebrow">Risk</span><p><span class="chip c-ok">low</span></p></div>
+      <div><span class="eyebrow">Live check</span><p>{the look or check, or —}</p></div>
+      <div><span class="eyebrow">Waits for</span><p>{steps, a passed check, a decision}</p></div>
+    </div>
+    <details class="builder"><summary>Builder detail</summary><div class="md">
+<p><strong>Verify first ({V…}).</strong> {OPTIONAL: the look at the code, data or real product that settles an open point before building}</p>
+<p><strong>Files, in order</strong></p>
+<ol>
+<li>{NEW | EXISTING} <code>{path}::{function}</code>: {what changes}</li>
+</ol>
+<p><strong>Tests, written first</strong></p>
+<ul>
+<li>{NEW | EXISTING} <code>{test file}</code> › "{test name}"</li>
+</ul>
+<p><strong>Done when</strong></p>
+<ul>
+<li>{the tests pass, each having failed first}</li>
+<li>{what is true in the real environment, if anything}</li>
+</ul>
+<div class="ticket">
+<p class="eyebrow">Ticket, ready to paste</p>
+<p class="t-title">{CODE}-1 · {title, as a ticket}</p>
+<p>{Two or three sentences for someone who hasn't read the spec: what changes for users, and why. Links to this step and to the spec's requirements.}</p>
+<p><strong>Acceptance criteria</strong></p>
+<ul>
+<li>{each Done-when line, word for word}</li>
+</ul>
+</div>
+    </div></details>
+  </div>
+
+  <!-- The looks: each verify-first item and the step that takes it. -->
+  <div class="sv-sec" id="plan-verify">
+    <div class="sv-head"><span class="sv-no">·</span><h3>The looks before building (spec §11)</h3></div>
+    <div class="scroll"><table class="wx">
+<thead><tr><th>Look</th><th>What it settles</th><th>Taken in</th></tr></thead>
+<tbody>
+<tr><td><b>{V1}</b></td><td>{…}</td><td><a href="#step-{n}">step {n}</a></td></tr>
+</tbody>
+</table></div>
+  </div>
+
+  <!-- Found while planning: what the Plan agent, the code and the two reviewers changed, and why. -->
+  <div class="sv-sec" id="plan-found">
+    <div class="sv-head"><span class="sv-no">·</span><h3>Found while planning</h3></div>
+    <div class="md">
+<p>{the draft's source (the built-in Plan agent, on which model); the two reviewers and their models}</p>
+<ol>
+<li><strong>{the finding, in one line}.</strong> {what it changed in the plan, and why}</li>
+</ol>
+    </div>
+  </div>
+
+  <!-- After approval -->
+  <div class="sv-sec" id="plan-amend">
+    <div class="sv-head"><span class="sv-no">A</span><h3>Your words and amendments</h3></div>
+    <div class="md"><p><b>{date}, on {what was asked}:</b> <i>"{their exact words}"</i></p><h3>Amendments</h3><p>None yet.</p></div>
+  </div>
+
+</main>
+</body>
+</html>

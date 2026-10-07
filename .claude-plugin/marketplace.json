@@ -1,0 +1,19 @@
+{
+  "name": "teamgonuts",
+  "owner": {
+    "name": "teamgonuts",
+    "url": "https://github.com/teamgonuts"
+  },
+  "description": "Plugins by teamgonuts",
+  "plugins": [
+    {
+      "name": "intent-spec-plan",
+      "source": "./",
+      "description": "Intent → spec → build plan: three approved HTML pages per initiative, tracked on a live artifact page.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "homepage": "https://github.com/teamgonuts/intent-spec-plan",
+      "repository": "https://github.com/teamgonuts/intent-spec-plan"
+    }
+  ]
+}

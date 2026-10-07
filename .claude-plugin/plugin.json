@@ -1,0 +1,13 @@
+{
+  "name": "intent-spec-plan",
+  "version": "0.1.0",
+  "description": "Shape any initiative in three approved steps: an intent (what and why, from one question at a time), a spec (exactly what will be built, pictures first), and a build plan (ordered, ticket-ready steps for engineering teams). Each step is one HTML page, tracked on a live artifact page you approve from.",
+  "author": {
+    "name": "teamgonuts",
+    "url": "https://github.com/teamgonuts"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/teamgonuts/intent-spec-plan",
+  "repository": "https://github.com/teamgonuts/intent-spec-plan",
+  "keywords": ["product", "intent", "spec", "prd", "build-plan", "planning", "sdlc", "artifacts"]
+}
