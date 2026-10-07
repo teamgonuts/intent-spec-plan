@@ -5,6 +5,10 @@ description: Write an initiative's build plan as one HTML page (<docs>/<code>/pl
 
 # Build plan: the third and last step of every initiative
 
+The build plan is the plan that opens the Build stage of Anthropic's
+[AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook): plan first, read-only,
+and code only after the plan is accepted.
+
 The build plan turns an approved spec into the order it is built in.
 
 - **Each step** is one ticket and one pull request that an engineering team can pick up and build
@@ -59,7 +63,7 @@ The plan is **`<docs>/<code>/plan.html`**, beside `intent.html` and `spec.html`,
 
 No build plan before the spec is approved: check the tracker's Spec stage first. Nothing is
 built, and no ticket is filed, before the plan is approved. Approval is the tracker's Build plan
-stage set to *Approved*, with the file's status reading `approved <date>`.
+stage set to *Approved*, with the file's status reading `approved YYYY-MM-DD`.
 
 ## 1. Read before writing
 

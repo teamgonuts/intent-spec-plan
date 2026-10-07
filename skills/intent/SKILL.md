@@ -6,7 +6,9 @@ description: Write or change an initiative's intent as one HTML page (<docs>/<co
 # Intent: the first step of every initiative
 
 The intent records what the owner wants, why, and within which limits, in their own words and on
-one page. The spec builds on it, and the build plan on the spec.
+one page. The spec builds on it, and the build plan on the spec. It is the Plan stage of Anthropic's
+[AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook), whose artifact is the
+intent file.
 
 - **The owner** is the person named in `intent-spec-plan.json`, who approves. Use their name in the
   document wherever the template says `{Owner}`.
@@ -39,7 +41,7 @@ The intent is **`<docs>/<code>/intent.html`**. It is never a `.md` file.
 
 There is no spec, plan, ticket or code for an initiative until the owner has approved its intent.
 Approval is the tracker's Intent stage set to **Approved** (by the owner on the page, or by you
-after they say so in chat), with the file's status line reading `approved <date>`. This holds
+after they say so in chat), with the file's status line reading `approved YYYY-MM-DD`. This holds
 however small the work looks.
 
 ## 1. Read before asking anything
@@ -128,7 +130,7 @@ Fill `template.html` into `<docs>/<code>/intent.html`. The rules:
 - **Each correction** goes into the intent, with a row in the appendix in the owner's words.
   Rebuild and republish.
 - **On approval:**
-  - set `Status: approved <date>` in the file;
+  - set `Status: approved YYYY-MM-DD` in the file;
   - set the tracker's Intent stage to *Approved*, and log the owner's words;
   - if `commit_docs` is true, commit the folder (never push unless asked);
   - rebuild and republish;

@@ -1,162 +1,236 @@
 <title>@@TITLE@@</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<style>
-/* Layout: one page, read top to bottom: where the initiative stands, then the intent, the spec and
-   the build plan in order, then the standing rules and the log. Tokens match sdlc-kit.css. */
-:root{
-  --bg:#F4F6F3; --surface:#FFFFFF; --ink:#1B2220; --muted:#5A6661; --faint:#8A948F; --rule:#D8DED9; --rule-strong:#B9C2BC;
-  --new:#2D5BA3; --new-soft:#E3EAF6;
-  --cut:#A9462B; --cut-soft:#F6E6DF;
-  --keep:#3B7A4B; --keep-soft:#E2EFE4;
-  --warn:#8C6410; --warn-bg:#F7EDD2; --na-bg:#ECEFEC;
-  --display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
-  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    color-scheme:dark;
-    --bg:#121715; --surface:#1A201E; --ink:#E6ECE8; --muted:#A4AFAA; --faint:#7D8883; --rule:#2C3431; --rule-strong:#3E4843;
-    --new:#8FB0EA; --new-soft:#1E2A3D; --cut:#E99A7F; --cut-soft:#3A241D; --keep:#8CCB9B; --keep-soft:#1C3023;
-    --warn:#E3BE6A; --warn-bg:#3A2F14; --na-bg:#262D2A;
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#121715; --surface:#1A201E; --ink:#E6ECE8; --muted:#A4AFAA; --faint:#7D8883; --rule:#2C3431; --rule-strong:#3E4843;
-  --new:#8FB0EA; --new-soft:#1E2A3D; --cut:#E99A7F; --cut-soft:#3A241D; --keep:#8CCB9B; --keep-soft:#1C3023;
-  --warn:#E3BE6A; --warn-bg:#3A2F14; --na-bg:#262D2A;
-}
-*{box-sizing:border-box}
-/* [hidden] must win over the display rules below, or hidden placeholders and forms still show. */
-[hidden]{display:none !important}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.55;margin:0;padding-inline:20px;padding-block:32px 64px}
-@media (max-width:600px){body{padding-inline:16px}}
-.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:52px}
-h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.005em}
-h1{font-size:clamp(28px,5vw,42px);line-height:1.08;font-weight:700}
-h2{font-size:24px;font-weight:600;line-height:1.15}
-h3{font-size:17px;font-weight:600}
-p{margin:0;max-width:72ch}
-ul,ol{margin:0;padding-left:20px}
-a{color:var(--new)}
-a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--new);outline-offset:2px}
-.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.lede{font-size:17px;max-width:70ch}
-.muted{color:var(--muted)}
-.meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
-header.top{display:flex;flex-direction:column;gap:14px}
-section.block{display:flex;flex-direction:column;gap:16px;min-width:0}
-.sec-head{display:flex;flex-direction:column;gap:6px;border-top:2px solid var(--ink);padding-top:14px}
-code{font-family:var(--mono);font-size:.88em;background:var(--na-bg);padding:1px 4px;border-radius:3px;overflow-wrap:anywhere}
-.handoff{background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--warn);border-radius:4px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
-.handoff b{font-family:var(--display);font-size:19px;font-weight:600}
-.chip{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;font-weight:500;white-space:nowrap;background:var(--na-bg);color:var(--muted)}
-.chip.s-drafting,.chip.s-in-progress{background:var(--new-soft);color:var(--new)}
-.chip.s-for-approval{background:var(--warn-bg);color:var(--warn)}
-.chip.s-approved,.chip.s-done{background:var(--keep-soft);color:var(--keep)}
-.chip.s-blocked{background:var(--cut-soft);color:var(--cut)}
-.ro{font-size:13px;color:var(--warn);background:var(--warn-bg);border-radius:3px;padding:6px 10px}
-
-/* stages */
-.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-@media (max-width:600px){.stages{grid-template-columns:1fr}}
-.stage{background:var(--surface);border:1px solid var(--rule);border-top:4px solid var(--rule-strong);border-radius:4px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
-.stage[data-st="drafting"],.stage[data-st="in-progress"]{border-top-color:var(--new)}
-.stage[data-st="for-approval"]{border-top-color:var(--warn)}
-.stage[data-st="approved"],.stage[data-st="done"]{border-top-color:var(--keep)}
-.stage[data-st="blocked"]{border-top-color:var(--cut)}
-.stage .num{font-family:var(--mono);font-size:11px;color:var(--faint)}
-.stage .when{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.stage p{font-size:13.5px;line-height:1.45;color:var(--muted)}
-.stage a{font-size:13px}
-.stage select{font:inherit;font-size:12.5px;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:3px;padding:3px 6px;width:100%}
-.empty{font-size:14px;color:var(--muted);background:var(--surface);border:1px dashed var(--rule-strong);border-radius:4px;padding:14px 16px}
-
-/* how it is built */
-.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;counter-reset:f}
-@media (max-width:980px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:600px){.flow{grid-template-columns:1fr}}
-.flow div{border-left:2px solid var(--rule-strong);padding:2px 0 2px 10px;display:flex;flex-direction:column;gap:3px;font-size:13.5px;line-height:1.4;min-width:0}
-.flow div::before{counter-increment:f;content:counter(f);font-family:var(--display);font-size:20px;font-weight:600;color:var(--new);line-height:1}
-.flow div.you{border-left-color:var(--warn)}
-.flow div.you::before{color:var(--warn)}
-.flow b{font-family:var(--display);font-size:15.5px;font-weight:600}
-.flow span{color:var(--muted)}
-
-/* documents */
-.dochead{display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--ink);padding-top:14px}
-.dochead .row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
-.dochead h2{font-size:26px}
-.dochead .step{font-family:var(--display);font-size:26px;font-weight:600;color:var(--faint)}
-.dochead .facts{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
-.doc{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:26px clamp(16px,4vw,40px) 34px;display:flex;flex-direction:column;gap:14px;min-width:0}
-.doc>h1:first-child{font-size:clamp(21px,3.4vw,27px);line-height:1.15}
-.doc h1{font-size:24px}
-.doc h2{font-size:20px;border-top:1px solid var(--rule);padding-top:18px;margin-top:10px}
-.doc h3{font-size:16.5px;margin-top:4px}
-.doc p,.doc li{max-width:74ch}
-.doc ul,.doc ol{display:flex;flex-direction:column;gap:6px}
-.doc li>ul,.doc li>ol{margin-top:6px}
-.doc blockquote{margin:0;border-left:3px solid var(--rule-strong);padding:2px 0 2px 14px;color:var(--muted)}
-.scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:4px;background:var(--surface)}
-.doc table{border-collapse:collapse;width:100%;min-width:620px;font-size:13.5px}
-.doc th,.doc td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--rule)}
-.doc tr:last-child td{border-bottom:0}
-.doc thead th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:500;color:var(--muted);background:var(--bg)}
-.placeholder{background:var(--surface);border:1px dashed var(--rule-strong);border-radius:4px;padding:22px clamp(16px,4vw,36px);display:flex;flex-direction:column;gap:12px}
-.placeholder ol{display:flex;flex-direction:column;gap:6px;font-size:14.5px}
-
-/* log */
-.log{display:flex;flex-direction:column}
-.ev{display:grid;grid-template-columns:72px 92px minmax(0,1fr);gap:10px;font-size:14px;padding:8px 0;border-bottom:1px solid var(--rule);align-items:baseline}
-@media (max-width:600px){.ev{grid-template-columns:72px minmax(0,1fr)}.ev .tx{grid-column:1 / -1}}
-.ev .at{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
-.evform{display:grid;grid-template-columns:130px minmax(0,1fr) auto;gap:8px;align-items:center;margin-top:10px}
-@media (max-width:600px){.evform{grid-template-columns:1fr}}
-.evform select,.evform input{font:inherit;font-size:13.5px;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:3px;padding:6px 8px;width:100%}
-.btn{font:inherit;font-size:13px;font-weight:600;color:var(--surface);background:var(--new);border:0;border-radius:3px;padding:7px 12px;cursor:pointer}
-footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:18px;display:flex;flex-direction:column;gap:6px}
-.wrap .sv-band{margin-bottom:12px}
-.wrap .sv-band h1{font-size:clamp(22px,3.4vw,28px)}
-</style>
 <!--@@SPEC_KIT@@-->
+<style>
+/* The tracker page. Layout: a sticky slate band on top (the initiative, its three stages with live
+   status dots, and "Your move"), then one view at a time: the overview, the intent, the spec or the
+   plan. Colours and type come from sdlc-kit.css, inlined above; the band is the one plane that does
+   not change between light and dark, so its tokens are set once. */
+:root{
+  --band-red:#ff8a7f; --glow-mint:rgba(48,255,187,.2); --glow-amber:rgba(240,180,76,.2);
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 80px)}
+body{max-width:none;margin:0;padding:0 0 72px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:40px 0;display:flex;flex-direction:column;gap:44px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:26px 0;gap:36px}}
+.view{display:flex;flex-direction:column;gap:44px;min-width:0}
+.view:focus{outline:none}
+
+/* ---- the band ---------------------------------------------------------- */
+.isp-nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:60;background:var(--band);color:var(--band-ink);border-bottom:1px solid var(--band-rule);color-scheme:dark}
+.isp-in{max-width:1120px;margin:0 auto;padding-inline:20px;display:flex;align-items:stretch;gap:0 22px;overflow-x:auto;scrollbar-width:none}
+.isp-in::-webkit-scrollbar{display:none}
+.isp-it{display:flex;flex-direction:column;justify-content:center;gap:6px;padding:12px 2px 11px;text-decoration:none;color:var(--band-ink);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.isp-it:hover{color:var(--band-ink)}
+.isp-it:hover .isp-n{color:var(--on-band)}
+.isp-it:focus-visible{outline:2px solid var(--on-band);outline-offset:-2px;border-radius:var(--r-xs)}
+.isp-it[aria-current="page"]{border-bottom-color:var(--on-band)}
+.isp-it[aria-current="page"] .isp-n{color:var(--on-band)}
+.isp-k{font:800 9.5px/1 var(--body);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--band-dim)}
+.isp-n{font:700 14px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.isp-brand .isp-n{color:var(--on-band)}
+.isp-brand svg{flex:none}
+.isp-i{font:500 11px/1 var(--mono);color:var(--band-dim);letter-spacing:0}
+.isp-dot{width:8px;height:8px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1.5px var(--band-dim)}
+.isp-dot[data-st="approved"]{background:var(--mint);box-shadow:0 0 0 3px var(--glow-mint)}
+.isp-dot[data-st="for-approval"]{background:var(--amber);box-shadow:0 0 0 3px var(--glow-amber)}
+.isp-dot[data-st="drafting"]{box-shadow:inset 0 0 0 1.5px var(--amber)}
+.isp-dot[data-st="blocked"]{background:var(--band-red);box-shadow:none}
+.isp-bar{width:1px;background:var(--band-rule);margin-block:13px;flex:none}
+.isp-steps{list-style:none;margin:0;padding:0;display:flex;align-items:stretch}
+.isp-steps li{display:flex;align-items:stretch}
+.isp-steps li+li::before{content:"";align-self:center;width:18px;height:1px;background:var(--band-rule);margin-inline:12px}
+.isp-move{margin-left:auto;align-self:center;display:inline-flex;align-items:center;gap:8px;background:var(--mint);color:var(--on-mint);text-decoration:none;border-radius:999px;padding:8px 14px;font:800 10.5px/1 var(--body);letter-spacing:.11em;text-transform:uppercase;white-space:nowrap;flex:none}
+.isp-move:hover{background:var(--mint-hot);color:var(--on-mint)}
+.isp-move:focus-visible{outline:2px solid var(--band-ink);outline-offset:2px}
+@media (max-width:900px){.isp-move{display:none}}
+@media (max-width:600px){
+  .isp-in{padding-inline:16px;gap:0 12px}
+  .isp-k{display:none}
+  .isp-it{padding-block:16px 14px}
+  .isp-brand .isp-t{display:none}
+  .isp-n{font-size:12.5px;gap:6px;letter-spacing:.05em}
+  .isp-steps li+li::before{width:8px;margin-inline:6px}
+}
+
+/* ---- shared pieces ----------------------------------------------------- */
+.btn{display:inline-flex;align-items:center;gap:8px;font:800 11px/1 var(--body);letter-spacing:.11em;text-transform:uppercase;padding:12px 16px;border-radius:var(--r-sm);border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink);text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--faint);background:var(--surface-2);color:var(--ink)}
+.btn.primary{background:var(--mint);border-color:var(--mint);color:var(--on-mint)}
+.btn.primary:hover{background:var(--mint-hot);border-color:var(--mint-hot);color:var(--on-mint)}
+.block{display:flex;flex-direction:column;gap:16px;min-width:0}
+.sec-head{display:flex;flex-direction:column;gap:6px}
+.sec-head h2{font-size:20px;text-transform:uppercase;letter-spacing:var(--track-display)}
+.sec-head p{color:var(--muted);font-size:14px}
+.chip i{width:6px;height:6px;border-radius:50%;background:currentColor;display:block}
+.chip.s-approved{background:var(--keep-soft);border-color:transparent;color:var(--keep)}
+.chip.s-for-approval{background:var(--warn-bg);border-color:transparent;color:var(--warn)}
+.chip.s-drafting{background:var(--mint-wash);border-color:transparent;color:var(--mint-deep)}
+.chip.s-blocked{background:var(--cut-soft);border-color:transparent;color:var(--cut)}
+.empty{font-size:14px;color:var(--muted);border:1.5px dashed var(--rule-strong);border-radius:var(--r);padding:16px 18px}
+.ro{font-size:13.5px;color:var(--warn);background:var(--warn-bg);border-radius:var(--r-sm);padding:9px 12px}
+
+/* ---- overview ---------------------------------------------------------- */
+.hero{display:flex;flex-direction:column;gap:16px}
+.hero h1{font-size:clamp(28px,5.4vw,48px);line-height:1.04;max-width:22ch}
+.hero .lede{font-size:17px;line-height:1.55;color:var(--muted);max-width:64ch}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pills span{font-size:12.5px;color:var(--muted);background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:4px 11px}
+.move{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px 20px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:15px;padding:20px 22px;box-shadow:var(--lift)}
+.move-tag{background:var(--mint-wash);color:var(--mint-deep);border:1px solid var(--mint-line);font:800 10px/1 var(--body);letter-spacing:var(--track-caps);text-transform:uppercase;border-radius:999px;padding:8px 12px;white-space:nowrap;align-self:start;margin-top:2px}
+.move b{font:700 18px/1.25 var(--display);text-transform:uppercase;letter-spacing:.05em;display:block}
+.move p{color:var(--muted);font-size:14.5px;margin-top:6px}
+@media (max-width:760px){.move{grid-template-columns:1fr}.move-tag{justify-self:start}.move .btn{justify-self:start}}
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.stages{grid-template-columns:1fr}}
+.stage{position:relative;background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;min-width:0;overflow:hidden;transition:box-shadow .15s ease,border-color .15s ease}
+.stage:hover{box-shadow:var(--lift);border-color:var(--rule-strong)}
+.stage::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--rule)}
+.stage[data-st="approved"]::before{background:var(--mint)}
+.stage[data-st="for-approval"]::before{background:var(--amber)}
+.stage[data-st="drafting"]::before{background:var(--mint-line)}
+.stage[data-st="blocked"]::before{background:var(--cut)}
+.stage-top{display:flex;align-items:center;gap:10px}
+.stage-no{font:500 12px/26px var(--mono);width:26px;height:26px;border-radius:50%;text-align:center;background:var(--surface-2);color:var(--muted);border:1px solid var(--rule);flex:none}
+.stage[data-st="approved"] .stage-no{background:var(--mint);border-color:var(--mint);color:var(--on-mint)}
+.stage h3{font-size:16px;text-transform:uppercase;letter-spacing:var(--track-display)}
+.stage .when{font-size:12.5px;color:var(--muted)}
+.stage .note{font-size:13.5px;color:var(--muted)}
+.stage-foot{margin-top:auto;padding-top:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.stage-foot a{font:800 10.5px/1 var(--body);letter-spacing:.11em;text-transform:uppercase;text-decoration:none}
+.stage select{font:600 12.5px/1.2 var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--rule-strong);border-radius:var(--r-sm);padding:6px 8px;max-width:100%}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:f}
+@media (max-width:900px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.flow{grid-template-columns:1fr}}
+.flow li{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:var(--r);background:var(--surface);border:1px solid var(--rule);min-width:0}
+.flow li::before{counter-increment:f;content:"0" counter(f);font:500 12px/1 var(--mono);color:var(--faint)}
+.flow b{font:700 15px/1.2 var(--display);text-transform:uppercase;letter-spacing:.06em}
+.flow span{font-size:13.5px;color:var(--muted)}
+.flow small{align-self:flex-start;margin-top:auto;font:800 9.5px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--warn);background:var(--warn-bg);border-radius:999px;padding:5px 8px}
+.flow li.out{background:var(--band);border-color:var(--band)}
+.flow li.out::before,.flow li.out span{color:var(--band-dim)}
+.flow li.out b{color:var(--on-band)}
+.source{font-size:13.5px;color:var(--muted)}
+details.rules{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r)}
+details.rules>summary{cursor:pointer;padding:14px 18px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+details.rules>summary b{font:700 15px/1.2 var(--display);text-transform:uppercase;letter-spacing:.06em}
+details.rules>summary span{font-size:13px;color:var(--muted)}
+.doc{padding:4px 18px 18px;display:flex;flex-direction:column;gap:12px;font-size:14.5px;min-width:0}
+.doc h1{font-size:18px}
+.doc h2{font-size:15px;text-transform:uppercase;letter-spacing:var(--track-display)}
+.doc ul,.doc ol{display:flex;flex-direction:column;gap:6px}
+.doc table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+.doc th,.doc td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--rule)}
+.log{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:2px 18px}
+.ev{display:grid;grid-template-columns:64px 96px minmax(0,1fr);gap:12px;font-size:14px;padding:11px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.ev:last-child{border-bottom:0}
+@media (max-width:600px){.ev{grid-template-columns:64px minmax(0,1fr)}.ev .tx{grid-column:1 / -1}}
+.ev .at{font:500 12px/1.4 var(--mono);color:var(--muted);white-space:nowrap}
+.log .empty{border:0;padding:14px 0}
+.evform{display:grid;grid-template-columns:130px minmax(0,1fr) auto;gap:8px;align-items:center}
+@media (max-width:600px){.evform{grid-template-columns:1fr}}
+.evform select,.evform input{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--rule-strong);border-radius:var(--r-sm);padding:9px 10px;width:100%}
+
+/* ---- the document views ------------------------------------------------ */
+.dochead{display:flex;flex-direction:column;gap:12px;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.dochead .row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.dochead h2{font-size:clamp(24px,4vw,34px);text-transform:uppercase;letter-spacing:var(--track-display)}
+.stepno{font:500 13px/34px var(--mono);width:34px;height:34px;text-align:center;border-radius:50%;background:var(--band);color:var(--on-band);flex:none}
+.facts{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:12.5px;color:var(--muted)}
+.view .sv-band{margin-bottom:8px}
+.view .sv-band h1{font-size:clamp(22px,3.6vw,30px)}
+.placeholder{border:1.5px dashed var(--rule-strong);border-radius:15px;padding:clamp(20px,4vw,36px);display:flex;flex-direction:column;gap:10px;max-width:760px}
+.placeholder h3{font-size:17px;text-transform:uppercase;letter-spacing:var(--track-display)}
+.placeholder p{color:var(--muted)}
+.pager{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:1px solid var(--rule);padding-top:22px}
+
+/* ---- colophon ---------------------------------------------------------- */
+.colophon{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;border-top:1px solid var(--rule);padding-top:28px;font-size:13px;color:var(--muted)}
+.colophon .stamp{font:800 10px/1 var(--body);letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+.colophon svg{color:var(--mint-deep)}
+.colophon p{max-width:70ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<nav class="isp-nav" aria-label="@@CODE@@ stages">
+  <div class="isp-in">
+    <a class="isp-it isp-brand" href="#overview" data-view="overview">
+      <span class="isp-k">@@PROJECT@@ · @@CODE@@</span>
+      <span class="isp-n"><svg width="22" height="10" viewBox="0 0 22 10" aria-hidden="true"><circle cx="3" cy="5" r="2.5" fill="currentColor"/><circle cx="11" cy="5" r="2.5" fill="currentColor"/><circle cx="19" cy="5" r="2.5" fill="currentColor"/><path d="M5.5 5h3M13.5 5h3" stroke="currentColor" stroke-width="1.4"/></svg><span class="isp-t">@@SHORT@@</span></span>
+    </a>
+    <span class="isp-bar" aria-hidden="true"></span>
+    <ol class="isp-steps">
+      <li><a class="isp-it" href="#intent" data-view="intent"><span class="isp-k" id="k-intent">Not started</span><span class="isp-n"><span class="isp-dot" id="dot-intent" aria-hidden="true"></span><span class="isp-i">1</span>Intent</span></a></li>
+      <li><a class="isp-it" href="#spec" data-view="spec"><span class="isp-k" id="k-spec">Not started</span><span class="isp-n"><span class="isp-dot" id="dot-spec" aria-hidden="true"></span><span class="isp-i">2</span>Spec</span></a></li>
+      <li><a class="isp-it" href="#plan" data-view="plan"><span class="isp-k" id="k-plan">Not started</span><span class="isp-n"><span class="isp-dot" id="dot-plan" aria-hidden="true"></span><span class="isp-i">3</span>Plan</span></a></li>
+    </ol>
+    <a class="isp-move" id="nav-move" href="#overview" title="@@NEXT_TITLE@@">Your move <span aria-hidden="true">→</span></a>
+  </div>
+</nav>
 
 <div class="wrap">
 
-<header class="top">
-  <div class="eyebrow">@@EYEBROW@@</div>
-  <h1>@@HEADLINE@@</h1>
-  <p class="lede">@@LEDE@@</p>
-  <div class="meta">@@META@@</div>
-  <div class="handoff">
-    <div class="eyebrow">Your move</div>
-    <b>@@NEXT_TITLE@@</b>
-    <p>@@NEXT_BODY@@</p>
-  </div>
-</header>
+<section class="view" id="overview" tabindex="-1" aria-label="Overview">
+  <header class="hero">
+    <div class="eyebrow">@@EYEBROW@@</div>
+    <h1>@@HEADLINE@@</h1>
+    <p class="lede">@@LEDE@@</p>
+    <div class="pills">@@META@@</div>
+  </header>
 
-<section class="block" aria-labelledby="h-stages">
-  <div class="sec-head">
-    <div class="eyebrow">Progress</div>
-    <h2 id="h-stages">Where @@CODE@@ stands</h2>
-    <p class="muted">Live: this updates as each stage moves. Setting a stage to Approved is your approval.</p>
+  <div class="move">
+    <span class="move-tag">Your move</span>
+    <div><b>@@NEXT_TITLE@@</b><p>@@NEXT_BODY@@</p></div>
+    <a class="btn primary" id="move-go" href="#intent">Open the intent <span aria-hidden="true">→</span></a>
   </div>
-  <div id="ro" class="ro" hidden>Live tracking isn't available in this view, so progress isn't shown here.</div>
-  <div class="stages" id="stages"><div class="empty">Loading the stages: intent, spec and build plan.</div></div>
-  <div class="flow" aria-label="How @@CODE@@ is shaped">
-    <div class="you"><b>Intent</b><span>What you want, why, and within which limits, from your answers to one question at a time. You approve it.</span></div>
-    <div class="you"><b>Spec</b><span>Exactly what will be built: what users see, every rule, what could go wrong, and how each requirement is proven. You approve it.</span></div>
-    <div class="you"><b>Build plan</b><span>The order it is built in, one step per ticket, each with its files, tests and live check. You approve it.</span></div>
-    <div><b>Hand-off</b><span>The teams build from the approved plan. Each step carries a ticket ready to paste into their tracker.</span></div>
-  </div>
+
+  <section class="block" aria-labelledby="h-stages">
+    <div class="sec-head">
+      <span class="eyebrow">Progress</span>
+      <h2 id="h-stages">Where @@CODE@@ stands</h2>
+      <p>Live. Setting a stage to Approved here is your approval.</p>
+    </div>
+    <div id="ro" class="ro" hidden>Live tracking isn't available in this view. The stages below are as of the last build.</div>
+    <div class="stages" id="stages"></div>
+  </section>
+
+  <section class="block" aria-labelledby="h-loop">
+    <div class="sec-head">
+      <span class="eyebrow">The loop</span>
+      <h2 id="h-loop">How @@CODE@@ gets shaped</h2>
+    </div>
+    <ol class="flow">
+      <li><b>Intent</b><span>What you want, why, and within which limits, from your answers to one question at a time.</span><small>You approve</small></li>
+      <li><b>Spec</b><span>Exactly what will be built: what users see, every rule, what could go wrong, and how each requirement is proven.</span><small>You approve</small></li>
+      <li><b>Build plan</b><span>The order it is built in, one step per ticket, each with its files, tests and live check.</span><small>You approve</small></li>
+      <li class="out"><b>Hand-off</b><span>The teams build from the approved plan. Every step carries a ticket ready to paste into their tracker.</span></li>
+    </ol>
+    <p class="source">The first three stages of Anthropic's <a href="https://claude.com/blog/the-ai-native-sdlc-playbook" target="_blank" rel="noopener">AI-native SDLC playbook</a> (Plan, Design, Build), each ending in a file the next one reads.</p>
+  </section>
+
+  <section class="block" id="standing-rules" aria-label="Standing rules" hidden>
+    <details class="rules">
+      <summary><b>Standing rules</b><span>What every initiative in @@PROJECT@@ inherits · <code>@@STANDING_PATH@@</code></span></summary>
+      <article class="doc" id="doc-standing"></article>
+    </details>
+  </section>
+
+  <section class="block" aria-labelledby="h-log">
+    <div class="sec-head">
+      <span class="eyebrow">Log</span>
+      <h2 id="h-log">Decisions and events</h2>
+    </div>
+    <div class="log" id="log"><div class="empty">Loading the log.</div></div>
+    <form class="evform" id="evform" hidden>
+      <select id="ev-kind" aria-label="Kind"><option value="note">note</option><option value="decision">decision</option><option value="event">event</option></select>
+      <input id="ev-text" placeholder="What happened, in one line" autocomplete="off" aria-label="What happened">
+      <button class="btn" type="submit">Add to log</button>
+    </form>
+  </section>
 </section>
 
-<section class="block" id="intent" aria-labelledby="h-intent">
+<section class="view" id="intent" tabindex="-1" aria-labelledby="h-intent" hidden>
   <div class="dochead">
-    <div class="row"><span class="step">1</span><h2 id="h-intent">Intent</h2><span class="chip" id="intent-chip">Not started</span></div>
+    <div class="row"><span class="stepno">1</span><h2 id="h-intent">Intent</h2><span class="chip" id="intent-chip">Not started</span></div>
     <div class="facts"><span id="intent-when"></span><code>@@CODE_DIR@@/intent.html</code><span><!--@@INTENT_COMMIT@@--></span></div>
   </div>
 <!--@@INTENT_DOC@@-->
@@ -164,11 +238,12 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);paddin
     <h3>The intent is being shaped</h3>
     <p>It starts as questions in chat, one at a time, each with a recommended answer. Once every section can be filled from your answers, the one-page intent appears here for your approval.</p>
   </div>
+  <nav class="pager" aria-label="Next document"><a class="btn" href="#overview"><span aria-hidden="true">←</span> Overview</a><a class="btn" href="#spec">Spec <span aria-hidden="true">→</span></a></nav>
 </section>
 
-<section class="block" id="spec" aria-labelledby="h-spec">
+<section class="view" id="spec" tabindex="-1" aria-labelledby="h-spec" hidden>
   <div class="dochead">
-    <div class="row"><span class="step">2</span><h2 id="h-spec">Spec</h2><span class="chip" id="spec-chip">Not started</span></div>
+    <div class="row"><span class="stepno">2</span><h2 id="h-spec">Spec</h2><span class="chip" id="spec-chip">Not started</span></div>
     <div class="facts"><span id="spec-when"></span><code>@@CODE_DIR@@/spec.html</code><span><!--@@SPEC_COMMIT@@--></span></div>
   </div>
 <!--@@SPEC_DOC@@-->
@@ -176,11 +251,12 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);paddin
     <h3>The spec starts when you approve the intent</h3>
     <p>It turns every line of the intent into requirements: what users will see in every state, the rules and limits, what could go wrong and what stops it, and the test that proves each requirement. It settles every open question the intent leaves.</p>
   </div>
+  <nav class="pager" aria-label="Next document"><a class="btn" href="#intent"><span aria-hidden="true">←</span> Intent</a><a class="btn" href="#plan">Build plan <span aria-hidden="true">→</span></a></nav>
 </section>
 
-<section class="block" id="plan" aria-labelledby="h-plan">
+<section class="view" id="plan" tabindex="-1" aria-labelledby="h-plan" hidden>
   <div class="dochead">
-    <div class="row"><span class="step">3</span><h2 id="h-plan">Build plan</h2><span class="chip" id="plan-chip">Not started</span></div>
+    <div class="row"><span class="stepno">3</span><h2 id="h-plan">Build plan</h2><span class="chip" id="plan-chip">Not started</span></div>
     <div class="facts"><span id="plan-when"></span><code>@@CODE_DIR@@/plan.html</code><span><!--@@PLAN_COMMIT@@--></span></div>
   </div>
 <!--@@PLAN_DOC@@-->
@@ -188,32 +264,13 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);paddin
     <h3>The build plan follows the approved spec</h3>
     <p>One step per change, in order. Each step says what users will see, the files that change, the tests that prove it, its risk and its live check, and ends with a ticket the team can paste into their tracker.</p>
   </div>
+  <nav class="pager" aria-label="Next document"><a class="btn" href="#spec"><span aria-hidden="true">←</span> Spec</a><a class="btn" href="#overview">Overview <span aria-hidden="true">→</span></a></nav>
 </section>
 
-<section class="block" id="standing-rules" aria-labelledby="h-standing" hidden>
-  <div class="dochead">
-    <div class="row"><h2 id="h-standing">Standing rules</h2></div>
-    <div class="facts"><span>What every initiative in @@PROJECT@@ inherits. Each intent's constraints point here instead of repeating them.</span><code>@@STANDING_PATH@@</code></div>
-  </div>
-  <article class="doc" id="doc-standing"></article>
-</section>
-
-<section class="block" aria-labelledby="h-log">
-  <div class="sec-head">
-    <div class="eyebrow">Log</div>
-    <h2 id="h-log">Decisions and events</h2>
-  </div>
-  <div class="log" id="log"><div class="empty">Loading the log.</div></div>
-  <form class="evform" id="evform" hidden>
-    <select id="ev-kind" aria-label="Kind"><option value="note">note</option><option value="decision">decision</option><option value="event">event</option></select>
-    <input id="ev-text" placeholder="What happened, in one line" autocomplete="off" aria-label="What happened">
-    <button class="btn" type="submit">Add to log</button>
-  </form>
-</section>
-
-<footer>
-  <span>The intent <em>is</em> <code>@@CODE_DIR@@/intent.html</code>, the spec <em>is</em> <code>@@CODE_DIR@@/spec.html</code> and the plan <em>is</em> <code>@@CODE_DIR@@/plan.html</code>: each is built into this page unchanged, with their shared <code>sdlc-kit.css</code>. Page built @@BUILT@@.</span>
-  <span>Made with <a href="https://github.com/teamgonuts/intent-spec-plan" target="_blank" rel="noopener">intent-spec-plan</a>.</span>
+<footer class="colophon">
+  <svg width="30" height="12" viewBox="0 0 22 10" aria-hidden="true"><circle cx="3" cy="5" r="2.5" fill="currentColor"/><circle cx="11" cy="5" r="2.5" fill="currentColor"/><circle cx="19" cy="5" r="2.5" fill="currentColor"/><path d="M5.5 5h3M13.5 5h3" stroke="currentColor" stroke-width="1.4"/></svg>
+  <span class="stamp">intent · spec · plan</span>
+  <p>Each document <em>is</em> its file in <code>@@CODE_DIR@@/</code>, built into this page unchanged. Page built @@BUILT@@. Made with <a href="https://github.com/teamgonuts/intent-spec-plan" target="_blank" rel="noopener">intent-spec-plan</a>, after Anthropic's <a href="https://claude.com/blog/the-ai-native-sdlc-playbook" target="_blank" rel="noopener">AI-native SDLC playbook</a>.</p>
 </footer>
 
 </div>
@@ -221,11 +278,21 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);paddin
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script>
 const STANDING = /*@@STANDING@@*/"";
+const INITIAL = /*@@STAGES@@*/{};
+const STAGES = [
+  { id: "intent", order: 1, label: "Intent" },
+  { id: "spec", order: 2, label: "Spec" },
+  { id: "plan", order: 3, label: "Build plan" },
+];
 const STATUS = {
   "not-started": "Not started", "drafting": "Drafting", "for-approval": "For your approval",
   "approved": "Approved", "blocked": "Blocked"
 };
-const DOCS = ["intent", "spec", "plan"];
+const KICKER = {
+  "not-started": "Not started", "drafting": "Drafting", "for-approval": "Needs your yes",
+  "approved": "Approved", "blocked": "Blocked"
+};
+const VIEWS = ["overview", "intent", "spec", "plan"];
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -234,12 +301,37 @@ function shortDate(iso, withYear) {
   return m ? `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]}${withYear ? " " + m[1] : ""}` : "";
 }
 
-/* documents: each one built in hides its placeholder */
+/* ---- views: one at a time, chosen by the hash or a click ---- */
+function show(view, target) {
+  for (const v of VIEWS) $("#" + v).hidden = v !== view;
+  for (const a of document.querySelectorAll(".isp-it[data-view]")) {
+    if (a.dataset.view === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  }
+  if (target) target.scrollIntoView({ block: "start" });
+  else window.scrollTo(0, 0);
+}
+function route(hash) {
+  const h = decodeURIComponent(String(hash || "").replace(/^#/, ""));
+  if (!h || VIEWS.includes(h)) { show(h || "overview"); return; }
+  const el = document.getElementById(h);
+  const view = el && el.closest(".view");
+  if (view) show(view.id, el); else show("overview");
+}
+document.addEventListener("click", (e) => {
+  const a = e.target.closest("a[href^='#']");
+  if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey) return;
+  const h = a.getAttribute("href");
+  if (h === "#") return;
+  e.preventDefault();
+  try { history.replaceState(null, "", h); } catch (err) { /* the frame may refuse; the view still changes */ }
+  route(h);
+});
+window.addEventListener("hashchange", () => route(location.hash));
+
+/* ---- documents: each one built in hides its placeholder ---- */
 for (const [id, root] of [["intent", "#intent-doc"], ["spec", "#spec-visual"], ["plan", "#plan-visual"]]) {
   if ($(root)) { const ph = $("#ph-" + id); if (ph) ph.hidden = true; }
 }
-
-/* the spec's requirements table: the builder-columns switch */
 (function () {
   const tg = $("#rq-toggle"), req = document.querySelector("#spec-visual .req");
   if (!tg || !req) return;
@@ -250,8 +342,9 @@ for (const [id, root] of [["intent", "#intent-doc"], ["spec", "#spec-visual"], [
     tg.textContent = on ? "Hide builder columns" : "Show builder columns";
   });
 })();
+for (const a of document.querySelectorAll("main a[href^='http'], .sv-band a[href^='http']")) { a.target = "_blank"; a.rel = "noopener"; }
 
-/* the standing rules, when the project has them */
+/* ---- standing rules, when the project has them ---- */
 if (STANDING) {
   const el = $("#doc-standing");
   if (window.marked && typeof window.marked.parse === "function") {
@@ -267,35 +360,48 @@ if (STANDING) {
   $("#standing-rules").hidden = false;
   for (const a of document.querySelectorAll("a.standing")) { a.setAttribute("href", "#standing-rules"); a.removeAttribute("target"); }
 }
-for (const a of document.querySelectorAll("main a[href^='http'], .sv-band a[href^='http']")) { a.target = "_blank"; a.rel = "noopener"; }
 
-/* tracker: stages and log live in the artifact's db */
-let canWrite = null;
+/* ---- stages: the build's snapshot first, then the live db ---- */
+const state = {};
+for (const s of STAGES) state[s.id] = { ...s, status: "not-started", ...(INITIAL[s.id] || {}) };
+let canWrite = false;
 let readOnly = false;
-function setChip(el, st) {
-  if (!el) return;
-  el.className = "chip s-" + st;
-  el.textContent = STATUS[st] || st;
+
+function nextStage() {
+  const by = (st) => STAGES.find((s) => state[s.id].status === st);
+  return by("for-approval") || by("blocked") || by("drafting") || STAGES.find((s) => state[s.id].status !== "approved") || STAGES[STAGES.length - 1];
 }
-function renderStages(snap) {
-  const box = $("#stages");
-  const rows = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order || 0) - (b.order || 0));
-  if (!rows.length) { box.innerHTML = '<div class="empty">No stages recorded yet.</div>'; return; }
-  box.innerHTML = rows.map((s) => {
-    const st = s.status || "not-started";
-    const jump = DOCS.includes(s.id) ? `<a href="#${esc(s.id)}">Read it below</a>` : "";
-    const ctl = (canWrite !== false && !readOnly)
+function render() {
+  for (const s of STAGES) {
+    const st = state[s.id].status || "not-started";
+    const date = state[s.id].date;
+    $("#dot-" + s.id).dataset.st = st;
+    $("#k-" + s.id).textContent = st === "approved" && date ? `Approved ${shortDate(date)}` : KICKER[st] || st;
+    const chip = $(`#${s.id}-chip`);
+    chip.className = "chip s-" + st;
+    chip.innerHTML = `<i></i>${esc(STATUS[st] || st)}`;
+    const when = $(`#${s.id}-when`);
+    when.textContent = date ? `${st === "approved" ? "Approved" : "Updated"} ${shortDate(date, true)}` : "";
+  }
+  const n = nextStage();
+  const go = $("#move-go");
+  go.setAttribute("href", "#" + n.id);
+  go.innerHTML = `Open the ${esc(n.label.toLowerCase())} <span aria-hidden="true">→</span>`;
+  $("#nav-move").setAttribute("href", "#" + n.id);
+  $("#stages").innerHTML = STAGES.map((s) => {
+    const r = state[s.id];
+    const st = r.status || "not-started";
+    const ctl = (canWrite && !readOnly)
       ? `<select data-stage="${esc(s.id)}" aria-label="Status of ${esc(s.label)}">${Object.keys(STATUS).map((k) => `<option value="${k}"${k === st ? " selected" : ""}>${STATUS[k]}</option>`).join("")}</select>`
       : "";
-    return `<div class="stage" data-st="${esc(st)}"><span class="num">${esc(s.order)}</span><h3>${esc(s.label)}</h3><span class="chip s-${esc(st)}">${esc(STATUS[st] || st)}</span>${s.date ? `<span class="when">${esc(shortDate(s.date))}</span>` : ""}${s.note ? `<p>${esc(s.note)}</p>` : ""}${jump}${ctl}</div>`;
+    return `<div class="stage" data-st="${esc(st)}">
+      <div class="stage-top"><span class="stage-no">${s.order}</span><h3>${esc(s.label)}</h3></div>
+      <div><span class="chip s-${esc(st)}"><i></i>${esc(STATUS[st] || st)}</span></div>
+      ${r.date ? `<span class="when">${st === "approved" ? "Approved" : "Updated"} ${esc(shortDate(r.date, true))}</span>` : ""}
+      ${r.note ? `<p class="note">${esc(r.note)}</p>` : ""}
+      <div class="stage-foot"><a href="#${esc(s.id)}">Open <span aria-hidden="true">→</span></a>${ctl}</div>
+    </div>`;
   }).join("");
-  for (const s of rows) {
-    if (!DOCS.includes(s.id)) continue;
-    const st = s.status || "not-started";
-    setChip($(`#${s.id}-chip`), st);
-    const when = $(`#${s.id}-when`);
-    if (when && s.date) when.textContent = `${st === "approved" ? "Approved" : "Updated"} ${shortDate(s.date, true)}`;
-  }
 }
 function renderLog(snap) {
   const box = $("#log");
@@ -306,31 +412,39 @@ function renderLog(snap) {
 function goReadOnly() {
   readOnly = true;
   $("#evform").hidden = true;
-  for (const s of document.querySelectorAll("select[data-stage]")) s.remove();
+  render();
 }
+
+render();
+route(location.hash);
+
 (async () => {
   let db = null;
   try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch (e) { db = null; }
   if (!db) {
     $("#ro").hidden = false;
-    $("#stages").innerHTML = "";
-    $("#log").innerHTML = "";
+    $("#log").innerHTML = '<div class="empty">The log lives in the published page.</div>';
     return;
   }
   try {
     const user = await window.claude.use("user");
-    canWrite = user ? await user.can("data.write") : null;
-  } catch (e) { canWrite = null; }
-  if (canWrite !== false) $("#evform").hidden = false;
+    const can = user ? await user.can("data.write") : null;
+    canWrite = can !== false;
+  } catch (e) { canWrite = true; }
+  if (canWrite) $("#evform").hidden = false;
+  render();
   const fail = () => {};
-  db.collection("stages").onSnapshot(renderStages, fail);
+  db.collection("stages").onSnapshot((snap) => {
+    for (const d of snap.docs) if (state[d.id]) Object.assign(state[d.id], d.data(), { id: d.id });
+    render();
+  }, fail);
   db.collection("log").orderBy("at", "desc").limit(200).onSnapshot(renderLog, fail);
   $("#stages").addEventListener("change", async (e) => {
     const sel = e.target.closest("select[data-stage]"); if (!sel) return;
     const now = new Date().toISOString();
     try {
       await db.doc("stages/" + sel.dataset.stage).update({ status: sel.value, date: now.slice(0, 10) });
-      await db.collection("log").add({ at: now, kind: sel.value === "approved" ? "decision" : "event", text: `${sel.dataset.stage}: set to ${STATUS[sel.value] || sel.value} on this page` });
+      await db.collection("log").add({ at: now, kind: sel.value === "approved" ? "decision" : "event", text: `${state[sel.dataset.stage].label}: set to ${STATUS[sel.value] || sel.value} on this page` });
     } catch (err) { if (err && err.code === "invalid_argument") goReadOnly(); }
   });
   $("#evform").addEventListener("submit", async (e) => {

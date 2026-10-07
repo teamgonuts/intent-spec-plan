@@ -1,8 +1,12 @@
 # The tracker page
 
-Every initiative has one artifact: the **tracker page**. It shows where the initiative stands
-(intent, spec, build plan), then the three documents themselves, then the project's standing rules
-and a log of decisions and events. The owner reads, comments on and approves from it.
+Every initiative has one artifact: the **tracker page**. A sticky band across the top names the
+initiative and shows its three stages (intent, spec, build plan) with a live status dot each: mint
+for approved, amber for waiting on the owner, a ring for drafting or not started. Clicking a stage
+switches the page to that document; the overview holds "Your move", the stage cards, the standing
+rules and a log of decisions and events. The owner reads, comments on and approves from it.
+
+Deep links work: `#intent`, `#spec`, `#plan`, or any id inside a document (for example `#step-3`).
 
 The skills `intent`, `spec` and `build-plan` all follow this file. `<kit>` below is this folder,
 the plugin's `kit/`: two levels up from any of the skills' base directories.
@@ -22,6 +26,7 @@ the plugin's `kit/`: two levels up from any of the skills' base directories.
 {
   "code": "REFUND",
   "title": "Self-serve refunds",
+  "short": "Self-serve refunds",
   "headline": "Customers get a refund without writing to support",
   "lede": "One or two sentences on what this initiative is, in plain words.",
   "started": "2026-10-07",
@@ -31,7 +36,9 @@ the plugin's `kit/`: two levels up from any of the skills' base directories.
 }
 ```
 
-`owner` and `project` come from `intent-spec-plan.json` unless `tracker.json` sets them.
+`short` is the name in the top band (keep it to two or three words). `owner` and `project` come from
+`intent-spec-plan.json` unless `tracker.json` sets them. Before the live db answers, the page shows
+each stage as its document's own status line says, so keep those lines current.
 
 ## Create it: the first thing an initiative does
 
@@ -88,7 +95,7 @@ The owner approves either by setting the stage to **Approved** on the page, or b
 - Before a skill starts the next stage, `ArtifactData` `get` `stages/<previous>`. If it's
   `approved`, the gate is open.
 - If the owner approved in chat, set the stage to `approved` yourself and log their words.
-- Either way, the document's own status line then reads `approved <date>`, and the page is rebuilt
+- Either way, the document's own status line then reads `approved YYYY-MM-DD`, and the page is rebuilt
   and republished.
 
 ## When something is missing

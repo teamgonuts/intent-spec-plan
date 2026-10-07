@@ -93,7 +93,21 @@ async function embed(file) {
   } else {
     stamp = `${file} saved ${day((await stat(path)).mtime)}`;
   }
-  return { html: (band ? band[0] + "\n" : "") + main[0], stamp };
+  return { html: (band ? band[0] + "\n" : "") + main[0], stamp, ...statusOf(band ? band[0] : "") };
+}
+
+// A document's stage, read from its own status line ("Status draft | for … approval | approved YYYY-MM-DD"),
+// so the page shows the right dots even where the live tracker can't load.
+function statusOf(band) {
+  const m = /<b>Status<\/b>\s*([^<]*)/i.exec(band);
+  const text = (m ? m[1] : "").trim();
+  if (/approved/i.test(text) && !/for .*approval/i.test(text)) {
+    const d = /(\d{4}-\d{2}-\d{2})/.exec(text);
+    return d ? { status: "approved", date: d[1] } : { status: "approved" };
+  }
+  if (/approval/i.test(text)) return { status: "for-approval" };
+  if (/blocked/i.test(text)) return { status: "blocked" };
+  return { status: "drafting" };
 }
 const intentDoc = await embed("intent.html");
 const specDoc = await embed("spec.html");
@@ -117,9 +131,16 @@ const meta = [
   ...(tracker.meta || []).map((m) => `<span>${esc(m)}</span>`),
 ].filter(Boolean).join("\n    ");
 
+// The stages as of this build: each written document's own status line. The live db overrides them.
+const stages = {};
+for (const [id, d] of [["intent", intentDoc], ["spec", specDoc], ["plan", planDoc]]) {
+  if (d.html) stages[id] = d.date ? { status: d.status, date: d.date } : { status: d.status };
+}
+
 const next = tracker.next || {};
 const values = {
   "@@TITLE@@": esc(tracker.page_title || `${code} ${tracker.title || ""}`.trim()),
+  "@@SHORT@@": esc(tracker.short || tracker.title || code),
   "@@EYEBROW@@": esc([project, code, tracker.title].filter(Boolean).join(" · ")),
   "@@HEADLINE@@": esc(tracker.headline || tracker.title || code),
   "@@LEDE@@": esc(tracker.lede || "This page holds the intent, the spec and the build plan in one place, made one step at a time, and tracks each until the plan is approved."),
@@ -140,6 +161,7 @@ const values = {
   "<!--@@SPEC_KIT@@-->": kit ? `<style>\n${kit.replace(/<\/style/gi, "<\\/style")}\n</style>` : "",
   // `<` escaped so nothing in the rules can close the script element it sits in.
   '/*@@STANDING@@*/""': JSON.stringify(standing).replace(/</g, "\\u003c"),
+  "/*@@STAGES@@*/{}": JSON.stringify(stages),
 };
 
 let page = await readFile(join(KIT, "page.template.html"), "utf8");

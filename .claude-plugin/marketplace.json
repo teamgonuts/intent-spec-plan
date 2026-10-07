@@ -10,7 +10,7 @@
       "name": "intent-spec-plan",
       "source": "./",
       "description": "Intent → spec → build plan: three approved HTML pages per initiative, tracked on a live artifact page.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "license": "MIT",
       "homepage": "https://github.com/teamgonuts/intent-spec-plan",
       "repository": "https://github.com/teamgonuts/intent-spec-plan"

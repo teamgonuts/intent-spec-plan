@@ -5,6 +5,10 @@ description: Write or change an initiative's spec as one HTML page (<docs>/<code
 
 # Spec: the second step of every initiative
 
+The spec is the Design stage of Anthropic's
+[AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook): requirements and design
+in one document, read by the build plan.
+
 The spec turns an approved intent into exactly what will be built:
 
 - what users will see;
@@ -38,7 +42,7 @@ The spec is **`<docs>/<code>/spec.html`**. It is never a `.md` file.
 - **No spec before the intent is approved.** Check the tracker's Intent stage first (see
   `kit/tracker.md`).
 - **No build plan, ticket or code until the owner has approved the spec.** Approval is the
-  tracker's Spec stage set to *Approved*, with the file's status reading `approved <date>` and
+  tracker's Spec stage set to *Approved*, with the file's status reading `approved YYYY-MM-DD` and
   every decision that needs the owner's yes answered.
 
 ## 1. Read before writing
